@@ -1,0 +1,85 @@
+---
+const navItems = [
+  { label: "Inicio", href: "/" },
+  { label: "Insumos", href: "/insumos" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contacto", href: "#contacto" },
+];
+
+const rubros = [
+  { label: "Packaging", href: "/rubros/packaging" },
+  { label: "Industria textil", href: "/rubros/textil" },
+  { label: "Editorial", href: "/rubros/editorial" },
+  { label: "Etiquetas", href: "/rubros/etiquetas" },
+  { label: "Comunicación visual", href: "/rubros/comunicacion-visual" },
+];
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="/" class="site-header__brand" aria-label="Daniel Moras - Inicio">
+      <img
+        src="/images/logo-daniel-moras.png"
+        alt="Daniel Moras"
+        class="site-header__logo"
+      />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+
+      <div class="site-header__dropdown">
+        <a href="#rubros" class="site-header__dropdown-trigger">
+          Rubros
+          <span aria-hidden="true">▾</span>
+        </a>
+
+        <div class="site-header__dropdown-menu">
+          {
+            rubros.map((rubro) => (
+              <a href={rubro.href}>
+                {rubro.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {
+        navItems.slice(1).map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))
+      }
+    </nav>
+
+    <a href="#contacto" class="site-header__cta">
+      Consultar
+    </a>
+
+    <details class="site-header__mobile">
+      <summary>
+        <span>Menú</span>
+      </summary>
+
+      <div class="site-header__mobile-panel">
+        <a href="/">Inicio</a>
+
+        <div class="site-header__mobile-group">
+          <strong>Rubros</strong>
+
+          {
+            rubros.map((rubro) => (
+              <a href={rubro.href}>
+                {rubro.label}
+              </a>
+            ))
+          }
+        </div>
+
+        <a href="/insumos">Insumos</a>
+        <a href="/blog">Blog</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </details>
+  </div>
+</header>

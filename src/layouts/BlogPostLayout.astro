@@ -1,0 +1,88 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  headings: Heading[];
+}
+
+const { post, headings = [] } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat("es-AR", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+}).format(post.data.pubDate);
+---
+
+<BaseLayout title={`${post.data.title} | Daniel Moras`} description={post.data.description}>
+  <main class="blog-post-page">
+    <div class="section-divider">
+      <span>Blog</span>
+    </div>
+
+    <article class="blog-post">
+      <div class="blog-post__layout">
+        <header class="blog-post__header">
+          <h1>{post.data.title}</h1>
+
+          <p>{post.data.description}</p>
+
+          <div class="blog-post__meta">
+            <span class="blog-post__category">{post.data.category}</span>
+
+            <time datetime={post.data.pubDate.toISOString()}>
+              {formattedDate}
+            </time>
+          </div>
+
+          <a href="/blog" class="blog-post__back">
+            Volver al blog
+          </a>
+        </header>
+
+        <aside class="blog-post__aside" aria-label="Resumen de la nota">
+          <div class="blog-post__aside-inner">
+            <div class="blog-post__image">
+              <img
+                src={post.data.image}
+                alt={post.data.imageAlt ?? ""}
+              />
+            </div>
+
+            {
+              headings.length > 0 && (
+                <nav class="blog-post__toc" aria-label="Contenido de la nota">
+                  <p>En esta nota</p>
+
+                  <ol>
+                    {
+                      headings.map((heading) => (
+                        <li>
+                          <a href={`#${heading.slug}`}>
+                            {heading.text}
+                          </a>
+                        </li>
+                      ))
+                    }
+                  </ol>
+                </nav>
+              )
+            }
+          </div>
+        </aside>
+
+        <div class="blog-post__body">
+          <slot />
+        </div>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

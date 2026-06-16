@@ -1,0 +1,114 @@
+---
+import Container from "../ui/Container.astro";
+
+const rubros = [
+  {
+    title: "Packaging",
+    eyebrow: "Envases, cajas y materiales rígidos",
+    description:
+      "Soluciones digitales para packaging, envases, cartón, materiales rígidos y producción personalizada con calidad industrial.",
+    href: "/rubros/packaging",
+    image: "/images/rubros/packaging.webp",
+    accent: "packaging",
+  },
+  {
+    title: "Industria textil",
+    eyebrow: "Sublimación e impresión directa",
+    description:
+      "Equipos para sublimación, impresión directa sobre tela, producción por rollo o por prenda, con estabilidad de color y continuidad.",
+    href: "/rubros/textil",
+    image: "/images/rubros/textil.webp",
+    accent: "textil",
+  },
+  {
+    title: "Editorial",
+    eyebrow: "Libros, tiradas variables y demanda",
+    description:
+      "Tecnología inkjet para producción editorial, impresión bajo demanda, libros, tiradas cortas y procesos de alta eficiencia.",
+    href: "/rubros/editorial",
+    image: "/images/rubros/editorial.webp",
+    accent: "editorial",
+  },
+  {
+    title: "Etiquetas",
+    eyebrow: "Producción digital flexible",
+    description:
+      "Soluciones para etiquetas profesionales, datos variables, series cortas, alta definición y producción rentable.",
+    href: "/rubros/etiquetas",
+    image: "/images/rubros/etiquetas.webp",
+    accent: "etiquetas",
+  },
+  {
+    title: "Comunicación visual",
+    eyebrow: "Cartelería, rígidos y gráfica UV",
+    description:
+      "Equipos para gráfica visual, cartelería, rígidos, piezas promocionales y aplicaciones de alto impacto.",
+    href: "/rubros/cvisual",
+    image: "/images/rubros/cvisual.webp",
+    accent: "comunicacion",
+  },
+  {
+    title: "Tintas e insumos",
+    eyebrow: "Calidad, continuidad y respaldo",
+    description:
+      "Tintas, partes e insumos para sostener la calidad de impresión, cuidar los equipos y mantener la producción activa.",
+    href: "/rubros/tintas-e-insumos",
+    image: "/images/rubros/tintas-insumos.webp",
+    accent: "insumos",
+  },
+];
+---
+
+<section class="rubros-featured" id="rubros">
+  <div class="section-divider section-divider--dark">
+    <span>Rubros</span>
+  </div>
+
+  <Container>
+    <div class="rubros-featured__heading">
+      <h2>
+        Soluciones pensadas según el tipo de producción.
+      </h2>
+
+      <p>
+        Cada industria tiene materiales, tiempos, volúmenes y exigencias propias.
+        Por eso organizamos las soluciones por rubro, para que encuentres más
+        rápido la tecnología adecuada para tu negocio.
+      </p>
+    </div>
+  </Container>
+
+  <div class="rubros-featured__list">
+    {
+      rubros.map((rubro, index) => (
+        <article
+          class:list={[
+            "rubro-feature",
+            `rubro-feature--${rubro.accent}`,
+            index % 2 === 1 && "rubro-feature--reverse",
+          ]}
+        >
+          <a
+            href={rubro.href}
+            class="rubro-feature__image"
+            aria-label={`Ver soluciones para ${rubro.title}`}
+          >
+            <img src={rubro.image} alt={rubro.title} />
+          </a>
+
+          <div class="rubro-feature__content">
+            <p class="rubro-feature__eyebrow">{rubro.eyebrow}</p>
+
+            <h3>{rubro.title}</h3>
+
+            <p>{rubro.description}</p>
+
+            <a href={rubro.href} class="rubro-feature__link">
+              Ver soluciones
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

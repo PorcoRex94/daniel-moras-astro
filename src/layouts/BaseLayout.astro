@@ -1,0 +1,33 @@
+---
+import "../styles/reset.css";
+import "../styles/tokens.css";
+import "../styles/global.css";
+import "../styles/site-sections.css";
+import "../styles/blog.css";
+import "../styles/rubros.css";
+
+import Header from "../components/layout/Header.astro";
+import FloatingChat from "../components/layout/FloatingChat.astro";
+
+const {
+  title = "Daniel Moras | Soluciones de impresión industrial",
+  description = "Soluciones de impresión industrial, tecnología inkjet, equipos para textil, packaging, etiquetas, editorial, comunicación visual e insumos.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+
+  <body id="top">
+    <Header />
+    <slot />
+    <FloatingChat />
+  </body>
+</html>

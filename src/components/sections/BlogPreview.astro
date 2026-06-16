@@ -1,0 +1,62 @@
+---
+import Container from "../ui/Container.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<section class="blog-preview" id="blog">
+  <div class="section-divider">
+    <span>Blog</span>
+  </div>
+
+  <Container>
+    <div class="blog-preview__heading">
+      <h2>Notas técnicas para tomar mejores decisiones.</h2>
+
+      <p>
+        Contenidos pensados para entender tecnologías, aplicaciones, tintas,
+        materiales y criterios de inversión antes de elegir una solución de
+        impresión.
+      </p>
+    </div>
+
+    <div class="blog-preview__grid">
+      {
+        posts.map((post) => (
+          <article class="blog-card">
+            <a
+              href={`/blog/${post.id}`}
+              class="blog-card__image"
+              aria-label={post.data.title}
+            >
+              <img src={post.data.image} alt={post.data.imageAlt ?? ""} />
+            </a>
+
+            <div class="blog-card__content">
+              <span>{post.data.category}</span>
+
+              <h3>
+                <a href={`/blog/${post.id}`}>{post.data.title}</a>
+              </h3>
+
+              <p>{post.data.description}</p>
+
+              <a href={`/blog/${post.id}`} class="blog-card__link">
+                Leer nota
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="blog-preview__cta">
+      <a href="/blog">
+        Ver todas las notas
+      </a>
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,107 @@
+---
+import Container from "../ui/Container.astro";
+
+const contactLinks = [
+  {
+    label: "WhatsApp",
+    value: "Consultar por WhatsApp",
+    href: "https://wa.me/5491166722505",
+  },
+  {
+    label: "Email",
+    value: "Enviar consulta",
+    href: "mailto: daniel@danielmoras.com.ar",
+  },
+];
+---
+
+<section class="contact-section" id="contacto">
+  <div class="section-divider">
+    <span>Contacto</span>
+  </div>
+
+  <Container class="contact-section__container">
+    <div class="contact-section__content">
+      <p class="eyebrow">Hablemos de tu proyecto</p>
+
+      <h2>
+        Contanos qué necesitás producir y evaluamos la solución adecuada.
+      </h2>
+
+      <p>
+        Cada consulta parte de una necesidad distinta: tipo de material, volumen,
+        aplicación, tinta, acabado o proceso productivo. Con esos datos podemos
+        orientarte mejor y recomendar equipos, insumos o soluciones acordes a tu
+        rubro.
+      </p>
+
+      <div class="contact-section__links">
+        {
+          contactLinks.map((link) => (
+            <a href={link.href} class="contact-link">
+              <span>{link.label}</span>
+              <strong>{link.value}</strong>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <form class="contact-form">
+      <div class="contact-form__row">
+        <label>
+          Nombre
+          <input type="text" name="name" placeholder="Tu nombre" />
+        </label>
+
+        <label>
+          Empresa
+          <input type="text" name="company" placeholder="Nombre de la empresa" />
+        </label>
+      </div>
+
+      <div class="contact-form__row">
+        <label>
+          Email
+          <input type="email" name="email" placeholder="tu@email.com" />
+        </label>
+
+        <label>
+          Teléfono
+          <input type="tel" name="phone" placeholder="Teléfono o WhatsApp" />
+        </label>
+      </div>
+
+      <label>
+        Rubro
+        <select name="category">
+          <option value="">Seleccionar rubro</option>
+          <option value="packaging">Packaging</option>
+          <option value="textil">Industria textil</option>
+          <option value="editorial">Editorial</option>
+          <option value="etiquetas">Etiquetas</option>
+          <option value="comunicacion-visual">Comunicación visual</option>
+          <option value="insumos">Tintas e insumos</option>
+        </select>
+      </label>
+
+      <label>
+        Consulta
+        <textarea
+          name="message"
+          rows="5"
+          placeholder="Contanos qué necesitás producir, sobre qué material, volumen aproximado o qué equipo estás evaluando."
+        ></textarea>
+      </label>
+
+      <button type="submit">
+        Enviar consulta
+      </button>
+
+      <p class="contact-form__note">
+        El formulario queda preparado visualmente. Después lo conectamos a email,
+        WhatsApp, Formspree, Netlify Forms o el sistema que prefieras.
+      </p>
+    </form>
+  </Container>
+</section>

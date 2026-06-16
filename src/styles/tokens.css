@@ -1,0 +1,45 @@
+:root {
+  /* Brand */
+  --color-brand-900: #063b34;
+  --color-brand-800: #0b4f45;
+  --color-brand-700: #0f6b5d;
+  --color-brand-600: #16816f;
+  --color-brand-500: #1c9a84;
+
+  --color-accent: #f5c542;
+  --color-accent-strong: #f0a900;
+
+  /* Neutrals */
+  --color-ink: #10201d;
+  --color-muted: #5d6b67;
+  --color-soft: #f4f7f6;
+  --color-white: #ffffff;
+  --color-border: #dbe5e2;
+
+  /* Rubro accents */
+  --accent-packaging: #d9792b;
+  --accent-textil: #b84fd9;
+  --accent-comunicacion: #2da8d8;
+  --accent-editorial: #3449a3;
+  --accent-etiquetas: #d9aa2b;
+  --accent-insumos: #79bd3f;
+
+  /* Typography */
+  --font-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Layout */
+  --container: 1180px;
+  --section-padding: clamp(3rem, 7vw, 6rem);
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+
+  /* Shadows */
+  --shadow-soft: 0 18px 45px rgba(6, 59, 52, 0.12);
+  --shadow-card: 0 12px 30px rgba(16, 32, 29, 0.1);
+
+  /* Motion */
+  --transition: 180ms ease;
+}

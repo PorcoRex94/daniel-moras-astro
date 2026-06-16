@@ -1,0 +1,158 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+const { rubro } = Astro.props;
+---
+
+<BaseLayout
+  title={`${rubro.title} | Daniel Moras`}
+  description={rubro.description}
+>
+  <main class="rubro-page">
+    <section class="rubro-hero">
+      <div class="rubro-hero__inner">
+        <div class="rubro-hero__content">
+          <p class="rubro-hero__eyebrow">{rubro.eyebrow}</p>
+
+          <h1>{rubro.title}</h1>
+
+          <p>{rubro.description}</p>
+
+          <a href="#consulta-rubro" class="rubro-hero__cta">
+            {rubro.cta}
+          </a>
+        </div>
+
+        <div class="rubro-hero__image">
+          <img src={rubro.image} alt={rubro.imageAlt} />
+        </div>
+      </div>
+    </section>
+
+    <section class="rubro-intro">
+      <div class="rubro-section__inner rubro-intro__inner">
+        <div>
+          <p class="rubro-section__eyebrow">Enfoque del rubro</p>
+          <h2>{rubro.introTitle}</h2>
+        </div>
+
+        <p>{rubro.introText}</p>
+      </div>
+    </section>
+
+    <section class="rubro-applications">
+      <div class="rubro-section__inner">
+        <header class="rubro-section__heading">
+          <p class="rubro-section__eyebrow">Aplicaciones</p>
+          <h2>Qué se puede resolver.</h2>
+          <p>
+            Cada proyecto tiene variables distintas: material, volumen,
+            terminación, tinta, formato y proceso posterior.
+          </p>
+        </header>
+
+        <div class="rubro-applications__grid">
+          {
+            rubro.applications.map((item) => (
+              <article class="rubro-application-card">
+                <span></span>
+                <p>{item}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="rubro-technologies">
+      <div class="rubro-section__inner">
+        <header class="rubro-section__heading">
+          <p class="rubro-section__eyebrow">Tecnologías</p>
+          <h2>Tecnologías que pueden evaluarse.</h2>
+          <p>
+            La recomendación depende del material, el flujo de trabajo y el tipo
+            de producción que se busca sostener.
+          </p>
+        </header>
+
+        <div class="rubro-technologies__grid">
+          {
+            rubro.technologies.map((technology) => (
+              <article class="rubro-technology-card">
+                <h3>{technology.title}</h3>
+                <p>{technology.text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="rubro-benefits">
+      <div class="rubro-section__inner rubro-benefits__inner">
+        <div class="rubro-benefits__content">
+          <p class="rubro-section__eyebrow">Beneficios</p>
+
+          <h2>
+            Una solución pensada para producir con más control.
+          </h2>
+
+          <p>
+            El objetivo no es sumar una máquina aislada, sino elegir una
+            tecnología que encaje con el proceso real de producción.
+          </p>
+        </div>
+
+        <div class="rubro-benefits__list">
+          {
+            rubro.benefits.map((benefit) => (
+              <article>
+                <span>✓</span>
+                <p>{benefit}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="rubro-solutions">
+      <div class="rubro-section__inner rubro-solutions__inner">
+        <header>
+          <p class="rubro-section__eyebrow">Soluciones posibles</p>
+          <h2>{rubro.solutionsTitle}</h2>
+        </header>
+
+        <div class="rubro-solutions__list">
+          {
+            rubro.solutions.map((solution) => (
+              <article>
+                <p>{solution}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="rubro-final-cta" id="consulta-rubro">
+      <div class="rubro-final-cta__inner">
+        <p class="rubro-section__eyebrow">{rubro.eyebrow}</p>
+
+        <h2>
+          Contanos qué necesitás producir y evaluamos la solución adecuada.
+        </h2>
+
+        <p>
+          Con información sobre material, volumen, aplicación y proceso actual,
+          podemos orientarte mejor sobre equipos, tintas, corte, finishing o
+          insumos.
+        </p>
+
+        <a href="#contacto">
+          Hacer una consulta
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

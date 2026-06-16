@@ -1,0 +1,111 @@
+---
+const featuredMachines = [
+  {
+    name: "Flora TX2000EP",
+    category: "Sublimación textil",
+    description:
+      "Producción textil por sublimación con continuidad, estabilidad de color y rendimiento industrial.",
+    image: "/images/maquinas/flora-tx2000ep.webp",
+    href: "/maquinas/flora-tx2000ep",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+  {
+    name: "Flora X3",
+    category: "Impresión directa en tela",
+    description:
+      "Impresión directa sobre tela para producción textil con definición, velocidad y consistencia.",
+    image: "/images/maquinas/flora-x3.webp",
+    href: "/maquinas/flora-x3",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+  {
+    name: "Allwin HB1800 UV",
+    category: "Comunicación visual",
+    description:
+      "Tecnología UV para gráfica, cartelería, rígidos y aplicaciones visuales de alto impacto.",
+    image: "/images/maquinas/allwin-hb1800-uv.webp",
+    href: "/maquinas/allwin-hb1800-uv",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+  {
+    name: "Flora 350GT",
+    category: "Etiquetas",
+    description:
+      "Impresión digital para etiquetas profesionales, tiradas variables y producción de calidad.",
+    image: "/images/maquinas/flora-j350gt.webp",
+    href: "/maquinas/flora-j350gt",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+  {
+    name: "Flora Phenix440",
+    category: "Editorial",
+    description:
+      "Tecnología inkjet para producción editorial, libros, tiradas flexibles y trabajos bajo demanda.",
+    image: "/images/maquinas/flora-phenix440.webp",
+    href: "/maquinas/flora-phenix440",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+  {
+    name: "Flora C25H Pro",
+    category: "Packaging",
+    description:
+      "Solución digital para packaging, envases y producción industrial sobre distintos materiales.",
+    image: "/images/maquinas/flora-c25hpro.webp",
+    href: "/maquinas/flora-c25hpro",
+    imageScale: 1,
+    imageX: "0rem",
+    imageY: "0rem",
+  },
+];
+---
+
+<section class="machine-showcase">
+  <div class="machine-showcase__slides">
+    {
+      featuredMachines.map((machine, index) => (
+        <article class="machine-showcase__slide" style={`--slide-index: ${index}`}>
+          <div class="machine-showcase__visual">
+            <div
+              class="machine-showcase__image-frame"
+              style={`
+                --image-scale: ${machine.imageScale};
+                --image-x: ${machine.imageX};
+                --image-y: ${machine.imageY};
+              `}
+            >
+              <img
+                src={machine.image}
+                alt=""
+                class="machine-showcase__image"
+              />
+            </div>
+          </div>
+
+          <div class="machine-showcase__copy">
+            <p class="machine-showcase__category">{machine.category}</p>
+            <h1>{machine.name}</h1>
+            <p class="machine-showcase__description">{machine.description}</p>
+
+            <a href={machine.href} class="machine-showcase__link">
+              Ver equipo
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="machine-showcase__progress" aria-hidden="true">
+    {featuredMachines.map((_, index) => <span style={`--dot-index: ${index}`} />)}
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+const {
+  href = "#",
+  variant = "primary",
+  size = "md",
+  class: className = "",
+  target,
+  rel,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class={`button button--${variant} button--${size} ${className}`}
+  target={target}
+  rel={rel}
+>
+  <slot />
+</a>

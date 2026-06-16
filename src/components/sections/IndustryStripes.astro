@@ -1,0 +1,86 @@
+---
+import Container from "../ui/Container.astro";
+
+const industries = [
+  {
+    title: "Industria textil",
+    text: "DTF, sublimación, impresión directa e insumos para producción textil.",
+    href: "/rubros/textil",
+    image: "/images/rubros/textil-index.webp",
+    accent: "textil",
+  },
+  {
+    title: "Packaging",
+    text: "Impresión digital, single-pass y soluciones para envases y packaging.",
+    href: "/rubros/packaging",
+    image: "/images/rubros/packaging-index.webp",
+    accent: "packaging",
+  },
+  {
+    title: "Comunicación visual",
+    text: "Plotters, corte, UV, DTF UV y soluciones gráficas de alto impacto.",
+    href: "/rubros/comunicacion-visual",
+    image: "/images/rubros/cvisual-index.webp",
+    accent: "comunicacion",
+  },
+  {
+    title: "Etiquetas",
+    text: "Equipos de impresión y corte para producción de etiquetas digitales.",
+    href: "/rubros/etiquetas",
+    image: "/images/rubros/etiquetas-index.webp",
+    accent: "etiquetas",
+  },
+  {
+    title: "Editorial",
+    text: "Tecnología inkjet para libros, producción editorial y tiradas variables.",
+    href: "/rubros/editorial",
+    image: "/images/rubros/editorial-index.webp",
+    accent: "editorial",
+  },
+  {
+    title: "Tintas e insumos",
+    text: "Insumos para sublimación, DTF, UV y producción gráfica profesional.",
+    href: "/rubros/tintas-e-insumos",
+    image: "/images/rubros/tintas-insumos-index.webp",
+    accent: "insumos",
+  },
+];
+---
+
+<section class="industry-stripes" id="rubros">
+  <Container>
+    <div class="section-heading">
+      <p class="eyebrow">Rubros</p>
+      <h2>Soluciones para distintas formas de producir.</h2>
+      <p>
+        Cada rubro tiene necesidades distintas. La idea no es venderte cualquier
+        máquina, sino ayudarte a elegir una solución que tenga sentido para tu
+        producción.
+      </p>
+    </div>
+
+    <div class="industry-stripes__list">
+      {
+        industries.map((industry, index) => (
+          <a
+            href={industry.href}
+            class={`industry-stripe industry-stripe--${industry.accent} ${
+              index % 2 === 1 ? "industry-stripe--reverse" : ""
+            }`}
+          >
+            <div class="industry-stripe__content">
+              <span>Solución</span>
+              <h3>{industry.title}</h3>
+              <p>{industry.text}</p>
+              <strong>Ver rubro</strong>
+            </div>
+
+            <div class="industry-stripe__media">
+              <img src={industry.image} alt={`Soluciones para ${industry.title}`} />
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </Container>
+</section>

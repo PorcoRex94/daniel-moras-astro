@@ -1,0 +1,89 @@
+---
+import Container from "../ui/Container.astro";
+
+const milestones = [
+  {
+    value: "1988",
+    label: "Inicios en el área gráfica",
+    text: "Trayectoria vinculada al mercado gráfico desde MORAS & Cia.",
+  },
+  {
+    value: "1994",
+    label: "Tecnología Inkjet",
+    text: "Experiencia en variantes eco-solvente, solvente, UV y base agua.",
+  },
+  {
+    value: "25 años",
+    label: "Instalaciones Inkjet",
+    text: "Desde el primer GrandJet de Scitex Vision instalado en Argentina y América Latina.",
+  },
+  {
+    value: "24 hs",
+    label: "Respaldo técnico",
+    text: "Stock de partes, tintas, contacto directo e Ingenieros de Campo de ISD S.A.",
+  },
+];
+---
+
+<section class="company-intro" id="quienes-somos">
+  <div class="section-divider">
+    <span>Quiénes somos</span>
+  </div>
+
+  <Container class="company-intro__container">
+    <div class="company-intro__content">
+      <h2>
+        Trayectoria y respaldo para elegir tecnología de impresión.
+      </h2>
+
+      <p>
+        Mis comienzos en el área gráfica datan del año 1988 en MORAS &amp; Cia.
+        Hoy, junto a ISD S.A., formo parte de una empresa con recursos técnicos
+        experimentados y una larga trayectoria en tecnología Inkjet.
+      </p>
+
+      <p>
+        Este año se cumplen 25 años desde la instalación del primer equipo Inkjet
+        GrandJet de Scitex Vision en Argentina, también el primero de América
+        Latina. Desde 1994 trabajamos con tecnología Inkjet en sus distintas
+        variantes: eco-solvente, solvente, UV y base agua.
+      </p>
+
+      <p>
+        Podemos ofrecer equipos Inkjet Mimaki, Allwin, Apex, Flora y HD Digital,
+        además de soluciones de finishing, mesas de corte Iecho y Saga, sistemas
+        láser, tintas, partes e insumos.
+      </p>
+
+      <p>
+        Ponemos toda nuestra experiencia a tu servicio, con atención directa,
+        respaldo técnico y acompañamiento según las necesidades reales de cada
+        proyecto.
+      </p>
+    </div>
+
+    <div class="company-intro__timeline" aria-label="Trayectoria y respaldo">
+      {
+        milestones.map((item) => (
+          <article class="company-intro__milestone">
+            <strong>{item.value}</strong>
+
+            <div>
+              <h3>{item.label}</h3>
+              <p>{item.text}</p>
+            </div>
+          </article>
+        ))
+      }
+
+      <div class="company-intro__service-card">
+        <span>Experiencia aplicada</span>
+        <strong>Soluciones según tu producción real.</strong>
+        <p>
+          Equipos, tintas, partes, finishing y acompañamiento técnico para elegir
+          con criterio.
+        </p>
+      </div>
+    </div>
+  </Container>
+</section>
