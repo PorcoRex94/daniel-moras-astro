@@ -1,62 +1,272 @@
 ---
+import RubroEquipmentGroups from "../components/sections/RubroEquipmentGroups.astro";
+import { familiasRubros } from "../data/familiasRubros";
+import { equiposTextil } from "../data/equiposTextil";
 import BaseLayout from "./BaseLayout.astro";
+import { rubros } from "../data/rubros";
+import { equipos } from "../data/equipos";
 
 const { rubro } = Astro.props;
+
+const siteUrl =
+  Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+
+const pagePath = Astro.url.pathname.replace(/\/$/, "");
+const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+
+const rubroUrls = {
+  packaging: "/rubros/packaging",
+  textil: "/rubros/textil",
+  editorial: "/rubros/editorial",
+  etiquetas: "/rubros/etiquetas",
+  comunicacionVisual: "/rubros/comunicacion-visual",
+};
+
+const rubroKeyByPath = {
+  "/rubros/packaging": "packaging",
+  "/rubros/textil": "textil",
+  "/rubros/editorial": "editorial",
+  "/rubros/etiquetas": "etiquetas",
+  "/rubros/comunicacion-visual": "comunicacionVisual",
+};
+
+const currentRubroKey = rubroKeyByPath[pagePath];
+
+const equiposDelRubro = currentRubroKey
+  ? equipos.filter((equipo) => equipo.rubros.includes(currentRubroKey))
+  : [];
+
+const relatedByPath = {
+  "/rubros/packaging": ["etiquetas", "editorial", "comunicacionVisual"],
+  "/rubros/textil": ["comunicacionVisual", "packaging", "editorial"],
+  "/rubros/editorial": ["etiquetas", "packaging", "comunicacionVisual"],
+  "/rubros/etiquetas": ["packaging", "editorial", "comunicacionVisual"],
+  "/rubros/comunicacion-visual": ["packaging", "textil", "etiquetas"],
+};
+
+const blogLinksByPath = {
+  "/rubros/packaging": [
+    {
+      title: "Impresión UV para packaging y comunicación visual",
+      href: "/blog/impresion-uv-packaging-comunicacion-visual",
+      text: "Una nota útil para entender cuándo conviene evaluar tecnología UV.",
+    },
+    {
+      title: "Tintas, partes e insumos para sostener producción",
+      href: "/blog/tintas-partes-insumos-produccion",
+      text: "Qué tener en cuenta para evitar paradas y sostener continuidad.",
+    },
+  ],
+
+  "/rubros/textil": [
+    {
+      title: "Cómo elegir tecnología para sublimación textil",
+      href: "/blog/como-elegir-tecnologia-para-sublimacion-textil",
+      text: "Criterios básicos para evaluar equipos, tintas y producción textil.",
+    },
+    {
+      title: "Tintas, partes e insumos para sostener producción",
+      href: "/blog/tintas-partes-insumos-produccion",
+      text: "Una mirada práctica sobre continuidad operativa e insumos.",
+    },
+  ],
+
+  "/rubros/editorial": [
+    {
+      title: "Tintas, partes e insumos para sostener producción",
+      href: "/blog/tintas-partes-insumos-produccion",
+      text: "Qué considerar para sostener procesos gráficos con menos interrupciones.",
+    },
+    {
+      title: "Impresión UV para packaging y comunicación visual",
+      href: "/blog/impresion-uv-packaging-comunicacion-visual",
+      text: "Aplicaciones y criterios para evaluar impresión UV.",
+    },
+  ],
+
+  "/rubros/etiquetas": [
+    {
+      title: "Impresión UV para packaging y comunicación visual",
+      href: "/blog/impresion-uv-packaging-comunicacion-visual",
+      text: "Una nota relacionada con materiales, acabado y versatilidad.",
+    },
+    {
+      title: "Tintas, partes e insumos para sostener producción",
+      href: "/blog/tintas-partes-insumos-produccion",
+      text: "Insumos y soporte como parte de la continuidad productiva.",
+    },
+  ],
+
+  "/rubros/comunicacion-visual": [
+    {
+      title: "Impresión UV para packaging y comunicación visual",
+      href: "/blog/impresion-uv-packaging-comunicacion-visual",
+      text: "Una nota directa para ampliar aplicaciones sobre distintos materiales.",
+    },
+    {
+      title: "Tintas, partes e insumos para sostener producción",
+      href: "/blog/tintas-partes-insumos-produccion",
+      text: "Qué mirar para sostener calidad y continuidad en producción.",
+    },
+  ],
+};
+
+const relatedKeys =
+  relatedByPath[pagePath] ??
+  ["packaging", "textil", "comunicacionVisual"];
+
+const relatedRubros = relatedKeys
+  .map((key) => {
+    const item = rubros[key];
+    const href = rubroUrls[key];
+
+    return item && href
+      ? {
+          title: item.eyebrow,
+          text: item.description,
+          href,
+        }
+      : null;
+  })
+  .filter(Boolean);
+
+const relatedBlogLinks = blogLinksByPath[pagePath] ?? [
+  {
+    title: "Tintas, partes e insumos para sostener producción",
+    href: "/blog/tintas-partes-insumos-produccion",
+    text: "Una nota útil para pensar continuidad productiva y respaldo técnico.",
+  },
+];
+
+const rubroSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${pageUrl}#service`,
+  name: rubro.title,
+  description: rubro.description,
+  serviceType: rubro.eyebrow,
+  url: pageUrl,
+  image: new URL(rubro.image, siteUrl).toString(),
+  provider: {
+    "@id": `${siteUrl}/#organization`,
+  },
+  areaServed: [
+    {
+      "@type": "Country",
+      name: "Argentina",
+    },
+    {
+      "@type": "Place",
+      name: "Exterior",
+    },
+  ],
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Inicio",
+      item: siteUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Rubros",
+      item: `${siteUrl}/#rubros`,
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: rubro.eyebrow,
+      item: pageUrl,
+    },
+  ],
+};
+
+const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
 ---
 
 <BaseLayout
   title={`${rubro.title} | Daniel Moras`}
   description={rubro.description}
+  image={rubro.image}
+  schema={[rubroSchema, breadcrumbSchema]}
 >
   <main class="rubro-page">
-    <section class="rubro-hero">
+    <section class="rubro-hero" style={heroStyle}>
       <div class="rubro-hero__inner">
         <div class="rubro-hero__content">
-          <p class="rubro-hero__eyebrow">{rubro.eyebrow}</p>
+          <nav class="rubro-breadcrumbs" aria-label="Breadcrumb">
+            <a href="/">Inicio</a>
+            <span aria-hidden="true">/</span>
+            <a href="/#rubros">Rubros</a>
+            <span aria-hidden="true">/</span>
+            <strong>{rubro.eyebrow}</strong>
+          </nav>
+
+          <p class="rubro-eyebrow rubro-hero__eyebrow">
+            {rubro.eyebrow}
+          </p>
 
           <h1>{rubro.title}</h1>
 
-          <p>{rubro.description}</p>
+          <p class="rubro-hero__description">
+            {rubro.description}
+          </p>
 
           <a href="#consulta-rubro" class="rubro-hero__cta">
             {rubro.cta}
           </a>
-        </div>
-
-        <div class="rubro-hero__image">
-          <img src={rubro.image} alt={rubro.imageAlt} />
         </div>
       </div>
     </section>
 
     <section class="rubro-intro">
       <div class="rubro-section__inner rubro-intro__inner">
-        <div>
-          <p class="rubro-section__eyebrow">Enfoque del rubro</p>
+        <div class="rubro-intro__heading">
+          <p class="rubro-eyebrow">Enfoque del rubro</p>
           <h2>{rubro.introTitle}</h2>
         </div>
 
-        <p>{rubro.introText}</p>
+        <p class="rubro-intro__description">
+          {rubro.introText}
+        </p>
       </div>
     </section>
 
     <section class="rubro-applications">
-      <div class="rubro-section__inner">
-        <header class="rubro-section__heading">
-          <p class="rubro-section__eyebrow">Aplicaciones</p>
+      <div class="rubro-section__inner rubro-applications__inner">
+        <header class="rubro-applications__heading">
+          <p class="rubro-eyebrow">Aplicaciones</p>
+
           <h2>Qué se puede resolver.</h2>
+
           <p>
             Cada proyecto tiene variables distintas: material, volumen,
             terminación, tinta, formato y proceso posterior.
           </p>
         </header>
 
-        <div class="rubro-applications__grid">
+        <div class="rubro-applications__list">
           {
-            rubro.applications.map((item) => (
-              <article class="rubro-application-card">
-                <span></span>
+            rubro.applications.map((item, index) => (
+              <article class="rubro-application-item">
+                <span class="rubro-application-item__number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
                 <p>{item}</p>
+
+                <span
+                  class="rubro-application-item__arrow"
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
               </article>
             ))
           }
@@ -67,8 +277,10 @@ const { rubro } = Astro.props;
     <section class="rubro-technologies">
       <div class="rubro-section__inner">
         <header class="rubro-section__heading">
-          <p class="rubro-section__eyebrow">Tecnologías</p>
+          <p class="rubro-eyebrow">Tecnologías</p>
+
           <h2>Tecnologías que pueden evaluarse.</h2>
+
           <p>
             La recomendación depende del material, el flujo de trabajo y el tipo
             de producción que se busca sostener.
@@ -88,14 +300,71 @@ const { rubro } = Astro.props;
       </div>
     </section>
 
+    {
+    currentRubroKey === "textil" ? (
+      <RubroEquipmentGroups
+        families={familiasRubros.textil}
+        equipment={equiposTextil}
+        rubroLabel="Industria textil"
+      />
+    ) : (
+      equiposDelRubro.length > 0 && (
+        <section class="rubro-equipment">
+          <div class="rubro-section__inner">
+            <header class="rubro-section__heading">
+              <p class="rubro-eyebrow">Equipos y soluciones</p>
+
+              <h2>
+                Soluciones que pueden evaluarse para este rubro.
+              </h2>
+
+              <p>
+                La selección final depende del material, formato, volumen,
+                terminación esperada y proceso actual de producción.
+              </p>
+            </header>
+
+            <div class="rubro-equipment__grid">
+              {
+                equiposDelRubro.map((item) => (
+                  <a
+                    href={`/equipos/${item.id}`}
+                    class="rubro-equipment-card"
+                  >
+                    <div class="rubro-equipment-card__image">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+
+                    <div class="rubro-equipment-card__content">
+                      <span>{item.category}</span>
+                      <h3>{item.name}</h3>
+                      <p>{item.description}</p>
+                    </div>
+
+                    <div class="rubro-equipment-card__tags">
+                      {item.tags.map((tag) => <small>{tag}</small>)}
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+      )
+    )
+  }
+
     <section class="rubro-benefits">
       <div class="rubro-section__inner rubro-benefits__inner">
         <div class="rubro-benefits__content">
-          <p class="rubro-section__eyebrow">Beneficios</p>
+          <p class="rubro-eyebrow">Beneficios</p>
 
-          <h2>
-            Una solución pensada para producir con más control.
-          </h2>
+          <h2>Una solución pensada para producir con más control.</h2>
 
           <p>
             El objetivo no es sumar una máquina aislada, sino elegir una
@@ -107,7 +376,7 @@ const { rubro } = Astro.props;
           {
             rubro.benefits.map((benefit) => (
               <article>
-                <span>✓</span>
+                <span aria-hidden="true">✓</span>
                 <p>{benefit}</p>
               </article>
             ))
@@ -118,8 +387,8 @@ const { rubro } = Astro.props;
 
     <section class="rubro-solutions">
       <div class="rubro-section__inner rubro-solutions__inner">
-        <header>
-          <p class="rubro-section__eyebrow">Soluciones posibles</p>
+        <header class="rubro-solutions__heading">
+          <p class="rubro-eyebrow">Soluciones posibles</p>
           <h2>{rubro.solutionsTitle}</h2>
         </header>
 
@@ -135,9 +404,61 @@ const { rubro } = Astro.props;
       </div>
     </section>
 
+    <section class="rubro-related">
+      <div class="rubro-section__inner">
+        <header class="rubro-section__heading">
+          <p class="rubro-eyebrow">También puede interesarte</p>
+
+          <h2>Más caminos para evaluar una solución.</h2>
+
+          <p>
+            Compará aplicaciones, tecnologías y rubros relacionados antes de
+            hacer una consulta.
+          </p>
+        </header>
+
+        <div class="rubro-related__grid">
+          <div class="rubro-related__group">
+            <h3>Rubros relacionados</h3>
+
+            <div class="rubro-related__cards">
+              {
+                relatedRubros.map((item) => (
+                  <a href={item.href} class="rubro-related-card">
+                    <span>Rubro</span>
+                    <strong>{item.title}</strong>
+                    <p>{item.text}</p>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="rubro-related__group">
+            <h3>Notas recomendadas</h3>
+
+            <div class="rubro-related__cards">
+              {
+                relatedBlogLinks.map((item) => (
+                  <a
+                    href={item.href}
+                    class="rubro-related-card rubro-related-card--blog"
+                  >
+                    <span>Blog</span>
+                    <strong>{item.title}</strong>
+                    <p>{item.text}</p>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="rubro-final-cta" id="consulta-rubro">
       <div class="rubro-final-cta__inner">
-        <p class="rubro-section__eyebrow">{rubro.eyebrow}</p>
+        <p class="rubro-eyebrow">{rubro.eyebrow}</p>
 
         <h2>
           Contanos qué necesitás producir y evaluamos la solución adecuada.
@@ -149,7 +470,7 @@ const { rubro } = Astro.props;
           insumos.
         </p>
 
-        <a href="#contacto">
+        <a href="/#contacto">
           Hacer una consulta
         </a>
       </div>

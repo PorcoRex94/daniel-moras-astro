@@ -5,6 +5,7 @@ import "../styles/global.css";
 import "../styles/site-sections.css";
 import "../styles/blog.css";
 import "../styles/rubros.css";
+import "../styles/equipos.css";
 
 import Header from "../components/layout/Header.astro";
 import FloatingChat from "../components/layout/FloatingChat.astro";
@@ -12,17 +13,96 @@ import FloatingChat from "../components/layout/FloatingChat.astro";
 const {
   title = "Daniel Moras | Soluciones de impresión industrial",
   description = "Soluciones de impresión industrial, tecnología inkjet, equipos para textil, packaging, etiquetas, editorial, comunicación visual e insumos.",
+  image = "/images/og-daniel-moras.webp",
+  type = "website",
+  schema = [],
 } = Astro.props;
+
+const siteUrl = Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const imageUrl = new URL(image, siteUrl).toString();
+
+const baseSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${siteUrl}/#organization`,
+    name: "Daniel Moras",
+    url: siteUrl,
+    logo: new URL("/images/logo-daniel-moras.png", siteUrl).toString(),
+    image: imageUrl,
+    description:
+      "Soluciones de impresión industrial, tecnología inkjet, equipos para textil, packaging, etiquetas, editorial, comunicación visual e insumos.",
+    areaServed: [
+      {
+        "@type": "Country",
+        name: "Argentina",
+      },
+      {
+        "@type": "Place",
+        name: "Exterior",
+      },
+    ],
+    knowsAbout: [
+      "Impresión industrial",
+      "Tecnología Inkjet",
+      "Impresión UV",
+      "Sublimación textil",
+      "Comunicación visual",
+      "Packaging",
+      "Etiquetas",
+      "Finishing",
+      "Mesas de corte",
+      "Tintas e insumos",
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "Daniel Moras",
+    url: siteUrl,
+    publisher: {
+      "@id": `${siteUrl}/#organization`,
+    },
+    inLanguage: "es-AR",
+  },
+];
+
+const extraSchema = Array.isArray(schema) ? schema : [schema];
+const structuredData = [...baseSchema, ...extraSchema].filter(Boolean);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Daniel Moras" />
+    <meta name="theme-color" content="#063b34" />
+
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Daniel Moras" />
+    <meta property="og:image" content={imageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
 
   <body id="top">

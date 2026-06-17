@@ -35,6 +35,29 @@ export const rubros = {
       },
     ],
 
+    equipment: [
+      {
+        title: "Impresoras UV para materiales rígidos y especiales",
+        text: "Para envases, prototipos, displays, cartón, plásticos, muestras comerciales y piezas de packaging que requieren buena definición y secado inmediato.",
+        tags: ["UV", "Rígidos", "Packaging"],
+      },
+      {
+        title: "Mesas de corte para packaging",
+        text: "Soluciones para corte, hendido, calado y preparación de piezas. Recomendables cuando el proceso necesita integrar impresión y terminación.",
+        tags: ["Corte", "Hendido", "Finishing"],
+      },
+      {
+        title: "Sistemas de finishing",
+        text: "Equipos complementarios para mejorar el flujo posterior a la impresión, ordenar terminaciones y reducir procesos externos.",
+        tags: ["Terminación", "Producción", "Control"],
+      },
+      {
+        title: "Tintas, partes e insumos",
+        text: "La continuidad en packaging depende también de tintas adecuadas, partes disponibles y soporte técnico para sostener producción.",
+        tags: ["Tintas", "Partes", "Soporte"],
+      },
+    ],
+
     benefits: [
       "Más control sobre muestras y tiradas cortas.",
       "Menos dependencia de procesos externos.",
@@ -86,6 +109,29 @@ export const rubros = {
       {
         title: "Corte y finishing",
         text: "Mesas extendedoras, corte y sistemas complementarios ayudan a ordenar el flujo productivo textil.",
+      },
+    ],
+
+    equipment: [
+      {
+        title: "Equipos de sublimación textil",
+        text: "Para producción sobre telas sublimables, indumentaria deportiva, decoración, rollos textiles y trabajos donde se busca estabilidad de color.",
+        tags: ["Sublimación", "Textil", "Rollo"],
+      },
+      {
+        title: "Impresión directa textil",
+        text: "Soluciones para imprimir sobre prendas o textiles preparados, según el tipo de tinta, material, pretratamiento y volumen de producción.",
+        tags: ["Directo textil", "Prenda", "Producción"],
+      },
+      {
+        title: "Sistemas rollo a rollo",
+        text: "Alternativas para empresas que necesitan mayor continuidad productiva, especialmente cuando trabajan con materiales textiles en formato rollo.",
+        tags: ["Rollo a rollo", "Volumen", "Continuidad"],
+      },
+      {
+        title: "Corte y extendedoras textiles",
+        text: "Mesas extendedoras, corte textil y sistemas complementarios para ordenar el flujo de producción posterior a la impresión.",
+        tags: ["Corte textil", "Finishing", "Flujo"],
       },
     ],
 
@@ -143,6 +189,29 @@ export const rubros = {
       },
     ],
 
+    equipment: [
+      {
+        title: "Equipos Inkjet para producción gráfica",
+        text: "Soluciones orientadas a imprentas y empresas gráficas que necesitan calidad estable, continuidad operativa y adaptación a distintos trabajos.",
+        tags: ["Inkjet", "Gráfica", "Producción"],
+      },
+      {
+        title: "Sistemas de finishing editorial",
+        text: "Equipos para mejorar terminación, preparación y presentación de piezas impresas dentro de un flujo gráfico más ordenado.",
+        tags: ["Finishing", "Editorial", "Terminación"],
+      },
+      {
+        title: "Mesas de corte para procesos gráficos",
+        text: "Útiles para piezas impresas, materiales especiales, trabajos de preparación posterior y reducción de tareas manuales.",
+        tags: ["Corte", "Automatización", "Gráfica"],
+      },
+      {
+        title: "Insumos y soporte para producción continua",
+        text: "Tintas, partes y respaldo técnico son claves cuando la operación necesita sostener volumen y reducir interrupciones.",
+        tags: ["Tintas", "Partes", "Servicio"],
+      },
+    ],
+
     benefits: [
       "Mayor continuidad en procesos gráficos.",
       "Mejor integración entre impresión y terminación.",
@@ -197,6 +266,29 @@ export const rubros = {
       },
     ],
 
+    equipment: [
+      {
+        title: "Equipos de impresión digital para etiquetas",
+        text: "Para empresas que necesitan producir etiquetas comerciales, industriales, promocionales o variables con buena definición y repetibilidad.",
+        tags: ["Etiquetas", "Digital", "Precisión"],
+      },
+      {
+        title: "Corte y troquelado digital",
+        text: "Soluciones para preparar etiquetas, resolver formas, terminaciones y series cortas sin depender siempre de procesos externos.",
+        tags: ["Corte", "Troquelado", "Terminación"],
+      },
+      {
+        title: "Sistemas de terminación",
+        text: "Equipos complementarios para mejorar acabado, presentación y control en producciones de etiquetas con distintos materiales.",
+        tags: ["Finishing", "Acabado", "Control"],
+      },
+      {
+        title: "Tintas e insumos compatibles",
+        text: "La elección de tintas, partes y mantenimiento influye directamente en estabilidad, adherencia y continuidad del trabajo.",
+        tags: ["Tintas", "Materiales", "Soporte"],
+      },
+    ],
+
     benefits: [
       "Mayor precisión en trabajos repetitivos.",
       "Mejor adaptación a materiales y aplicaciones.",
@@ -248,6 +340,29 @@ export const rubros = {
       {
         title: "Corte y terminación",
         text: "Complementa la impresión para entregar piezas listas, con mejor presentación y menor dependencia externa.",
+      },
+    ],
+
+    equipment: [
+      {
+        title: "Equipos eco-solventes y solventes",
+        text: "Para gráfica comercial, vinilos, banners, cartelería, gigantografías y aplicaciones habituales de comunicación visual.",
+        tags: ["Eco-solvente", "Solvente", "Gran formato"],
+      },
+      {
+        title: "Impresoras UV",
+        text: "Para ampliar aplicaciones sobre materiales rígidos, superficies especiales, displays, señalética y piezas de mayor valor agregado.",
+        tags: ["UV", "Rígidos", "Displays"],
+      },
+      {
+        title: "Sistemas de gran formato",
+        text: "Soluciones para trabajos visuales de mayor tamaño, producción comercial y piezas gráficas con impacto visual.",
+        tags: ["Gran formato", "Cartelería", "Producción"],
+      },
+      {
+        title: "Corte y terminación",
+        text: "Equipos para entregar piezas listas, mejorar presentación final y reducir tercerización en trabajos de gráfica visual.",
+        tags: ["Corte", "Finishing", "Entrega final"],
       },
     ],
 

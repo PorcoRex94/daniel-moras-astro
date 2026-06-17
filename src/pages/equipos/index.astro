@@ -1,0 +1,419 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { equipos } from "../../data/equipos";
+import { rubrosEquipos } from "../../data/categoriasEquipos";
+
+const title = "Equipos de impresión, corte y finishing | Daniel Moras";
+
+const description =
+  "Catálogo de equipos para comunicación visual, industria textil, packaging, etiquetas y producción editorial. Filtrá por rubro, categoría, marca y tecnología.";
+
+const rubroOptions = Object.values(rubrosEquipos);
+
+const categoryOptions = [
+  ...new Map(
+    equipos.map((equipo) => [
+      equipo.categoryId,
+      {
+        id: equipo.categoryId,
+        label: equipo.category,
+      },
+    ]),
+  ).values(),
+].sort((a, b) => a.label.localeCompare(b.label, "es"));
+
+const brandOptions = [...new Set(equipos.map((equipo) => equipo.brand))].sort(
+  (a, b) => a.localeCompare(b, "es"),
+);
+
+const technologyOptions = [
+  ...new Set(equipos.map((equipo) => equipo.technology)),
+].sort((a, b) => a.localeCompare(b, "es"));
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image="/images/og-daniel-moras.webp"
+>
+  <main class="equipos-page">
+    <section class="equipos-hero">
+      <div class="equipos-hero__inner">
+        <p class="equipos-eyebrow">Catálogo de equipos</p>
+
+        <h1>
+          Tecnología organizada según el proceso de producción.
+        </h1>
+
+        <p>
+          Explorá equipos de impresión, corte, troquelado y terminación según
+          rubro, categoría, marca y tecnología.
+        </p>
+      </div>
+    </section>
+
+    <section class="equipos-catalog">
+      <div class="equipos-section__inner">
+        <div class="equipos-filters">
+          <div class="equipos-filters__heading">
+            <div>
+              <p class="equipos-eyebrow">Filtros</p>
+              <h2>Encontrá una solución para tu producción.</h2>
+            </div>
+
+            <p class="equipos-filters__count" aria-live="polite">
+              <strong data-results-count>{equipos.length}</strong>
+              <span data-results-label>
+                {equipos.length === 1 ? "equipo encontrado" : "equipos encontrados"}
+              </span>
+            </p>
+          </div>
+
+          <form class="equipos-filters__form" data-equipment-filters>
+            <div class="equipos-filter-field">
+              <label for="filter-rubro">Rubro</label>
+
+              <div class="equipos-filter-field__control">
+                <select id="filter-rubro" name="rubro">
+                  <option value="">Todos los rubros</option>
+
+                  {
+                    rubroOptions.map((rubro) => (
+                      <option value={rubro.id}>{rubro.label}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="equipos-filter-field">
+              <label for="filter-category">Categoría</label>
+
+              <div class="equipos-filter-field__control">
+                <select id="filter-category" name="category">
+                  <option value="">Todas las categorías</option>
+
+                  {
+                    categoryOptions.map((category) => (
+                      <option value={category.id}>{category.label}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="equipos-filter-field">
+              <label for="filter-brand">Marca</label>
+
+              <div class="equipos-filter-field__control">
+                <select id="filter-brand" name="brand">
+                  <option value="">Todas las marcas</option>
+
+                  {
+                    brandOptions.map((brand) => (
+                      <option value={brand}>{brand}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="equipos-filter-field">
+              <label for="filter-technology">Tecnología</label>
+
+              <div class="equipos-filter-field__control">
+                <select id="filter-technology" name="technology">
+                  <option value="">Todas las tecnologías</option>
+
+                  {
+                    technologyOptions.map((technology) => (
+                      <option value={technology}>{technology}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </div>
+
+            <label class="equipos-filter-video">
+              <input type="checkbox" name="video" />
+
+              <span class="equipos-filter-video__indicator" aria-hidden="true">
+                ✓
+              </span>
+
+              <span>Solo equipos con video</span>
+            </label>
+
+            <button
+              type="button"
+              class="equipos-filters__reset"
+              data-reset-filters
+            >
+              Limpiar filtros
+            </button>
+          </form>
+        </div>
+
+        <div class="equipos-active-filter" data-active-filter hidden>
+          <span>Resultados filtrados</span>
+          <button type="button" data-reset-filters-secondary>
+            Ver todos
+          </button>
+        </div>
+
+        <div class="equipos-grid" data-equipment-grid>
+          {
+            equipos.map((equipo) => (
+              <article
+                class="equipo-card"
+                data-equipment-card
+                data-rubros={equipo.rubros.join(",")}
+                data-category={equipo.categoryId}
+                data-brand={equipo.brand}
+                data-technology={equipo.technology}
+                data-video={equipo.video?.url ? "true" : "false"}
+              >
+                <a
+                  href={`/equipos/${equipo.id}`}
+                  class="equipo-card__link"
+                  aria-label={`Ver ${equipo.name}`}
+                >
+                  <div class="equipo-card__image">
+                    <img
+                      src={equipo.image}
+                      alt={equipo.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
+
+                    {
+                      equipo.video?.url && (
+                        <span class="equipo-card__video">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.5 6.6v10.8L17 12 8.5 6.6Z" />
+                          </svg>
+
+                          Video
+                        </span>
+                      )
+                    }
+                  </div>
+
+                  <div class="equipo-card__content">
+                    <div class="equipo-card__meta">
+                      <span>{equipo.category}</span>
+                      <small>{equipo.brand}</small>
+                    </div>
+
+                    <h2>{equipo.name}</h2>
+
+                    <p>{equipo.description}</p>
+
+                    {
+                      equipo.subcategory && (
+                        <div class="equipo-card__subcategory">
+                          {equipo.subcategory}
+                        </div>
+                      )
+                    }
+                  </div>
+
+                  <div class="equipo-card__footer">
+                    <div class="equipo-card__tags">
+                      {
+                        equipo.tags.slice(0, 3).map((tag) => (
+                          <small>{tag}</small>
+                        ))
+                      }
+                    </div>
+
+                    <span class="equipo-card__action">
+                      Ver equipo
+                      <span aria-hidden="true">→</span>
+                    </span>
+                  </div>
+                </a>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="equipos-empty" data-empty-state hidden>
+          <span class="equipos-empty__icon" aria-hidden="true">⌕</span>
+
+          <h2>No encontramos equipos con esos filtros.</h2>
+
+          <p>
+            Probá modificando la categoría, la tecnología o la marca
+            seleccionada.
+          </p>
+
+          <button type="button" data-empty-reset>
+            Limpiar filtros
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="equipos-guidance">
+      <div class="equipos-guidance__inner">
+        <p class="equipos-eyebrow">Asesoramiento</p>
+
+        <h2>
+          Un mismo rubro puede necesitar configuraciones muy diferentes.
+        </h2>
+
+        <p>
+          El material, el volumen, el formato de trabajo, la terminación y el
+          proceso actual ayudan a definir qué tecnología conviene evaluar.
+        </p>
+
+        <a href="/#contacto">
+          Consultar por un equipo
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const filtersForm = document.querySelector("[data-equipment-filters]");
+  const equipmentCards = Array.from(
+    document.querySelectorAll("[data-equipment-card]"),
+  );
+  const resultsCount = document.querySelector("[data-results-count]");
+  const resultsLabel = document.querySelector("[data-results-label]");
+  const emptyState = document.querySelector("[data-empty-state]");
+  const activeFilter = document.querySelector("[data-active-filter]");
+
+  const resetButtons = [
+    document.querySelector("[data-reset-filters]"),
+    document.querySelector("[data-reset-filters-secondary]"),
+    document.querySelector("[data-empty-reset]"),
+  ].filter(Boolean);
+
+  const normalizeValue = (value) =>
+    String(value ?? "")
+      .trim()
+      .toLocaleLowerCase("es");
+
+  const getFieldValue = (name) => {
+    if (!(filtersForm instanceof HTMLFormElement)) {
+      return "";
+    }
+
+    const field = filtersForm.elements.namedItem(name);
+
+    if (field instanceof HTMLSelectElement) {
+      return normalizeValue(field.value);
+    }
+
+    return "";
+  };
+
+  const isVideoEnabled = () => {
+    if (!(filtersForm instanceof HTMLFormElement)) {
+      return false;
+    }
+
+    const field = filtersForm.elements.namedItem("video");
+
+    return field instanceof HTMLInputElement && field.checked;
+  };
+
+  const updateCatalog = () => {
+    const selectedRubro = getFieldValue("rubro");
+    const selectedCategory = getFieldValue("category");
+    const selectedBrand = getFieldValue("brand");
+    const selectedTechnology = getFieldValue("technology");
+    const selectedVideo = isVideoEnabled();
+
+    let visibleCards = 0;
+
+    equipmentCards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) {
+        return;
+      }
+
+      const cardRubros = normalizeValue(card.dataset.rubros)
+        .split(",")
+        .map((value) => value.trim());
+
+      const cardCategory = normalizeValue(card.dataset.category);
+      const cardBrand = normalizeValue(card.dataset.brand);
+      const cardTechnology = normalizeValue(card.dataset.technology);
+      const cardHasVideo = card.dataset.video === "true";
+
+      const matchesRubro =
+        !selectedRubro || cardRubros.includes(selectedRubro);
+
+      const matchesCategory =
+        !selectedCategory || cardCategory === selectedCategory;
+
+      const matchesBrand =
+        !selectedBrand || cardBrand === selectedBrand;
+
+      const matchesTechnology =
+        !selectedTechnology || cardTechnology === selectedTechnology;
+
+      const matchesVideo = !selectedVideo || cardHasVideo;
+
+      const isVisible =
+        matchesRubro &&
+        matchesCategory &&
+        matchesBrand &&
+        matchesTechnology &&
+        matchesVideo;
+
+      card.hidden = !isVisible;
+
+      if (isVisible) {
+        visibleCards += 1;
+      }
+    });
+
+    const filtersAreActive = Boolean(
+      selectedRubro ||
+        selectedCategory ||
+        selectedBrand ||
+        selectedTechnology ||
+        selectedVideo,
+    );
+
+    if (resultsCount) {
+      resultsCount.textContent = String(visibleCards);
+    }
+
+    if (resultsLabel) {
+      resultsLabel.textContent =
+        visibleCards === 1
+          ? "equipo encontrado"
+          : "equipos encontrados";
+    }
+
+    if (emptyState instanceof HTMLElement) {
+      emptyState.hidden = visibleCards !== 0;
+    }
+
+    if (activeFilter instanceof HTMLElement) {
+      activeFilter.hidden = !filtersAreActive;
+    }
+  };
+
+  const resetCatalog = () => {
+    if (!(filtersForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    filtersForm.reset();
+    updateCatalog();
+  };
+
+  filtersForm?.addEventListener("change", updateCatalog);
+
+  resetButtons.forEach((button) => {
+    button?.addEventListener("click", resetCatalog);
+  });
+
+  updateCatalog();
+</script>
