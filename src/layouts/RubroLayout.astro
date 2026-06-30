@@ -1,10 +1,15 @@
 ---
-import RubroEquipmentGroups from "../components/sections/RubroEquipmentGroups.astro";
-import { familiasRubros } from "../data/familiasRubros";
-import { equiposTextil } from "../data/equiposTextil";
 import BaseLayout from "./BaseLayout.astro";
+import RubroEquipmentGroups from "../components/sections/RubroEquipmentGroups.astro";
+
 import { rubros } from "../data/rubros";
 import { equipos } from "../data/equipos";
+import { familiasRubros } from "../data/familiasRubros";
+import { equiposTextil } from "../data/equiposTextil";
+import { equiposPackaging } from "../data/equiposPackaging";
+import { equiposComunicacionVisual } from "../data/equiposComunicacionVisual";
+import { equiposEtiquetas } from "../data/equiposEtiquetas";
+import { equiposEditorial } from "../data/equiposEditorial";
 
 const { rubro } = Astro.props;
 
@@ -57,7 +62,6 @@ const blogLinksByPath = {
       text: "Qué tener en cuenta para evitar paradas y sostener continuidad.",
     },
   ],
-
   "/rubros/textil": [
     {
       title: "Cómo elegir tecnología para sublimación textil",
@@ -70,7 +74,6 @@ const blogLinksByPath = {
       text: "Una mirada práctica sobre continuidad operativa e insumos.",
     },
   ],
-
   "/rubros/editorial": [
     {
       title: "Tintas, partes e insumos para sostener producción",
@@ -83,7 +86,6 @@ const blogLinksByPath = {
       text: "Aplicaciones y criterios para evaluar impresión UV.",
     },
   ],
-
   "/rubros/etiquetas": [
     {
       title: "Impresión UV para packaging y comunicación visual",
@@ -96,7 +98,6 @@ const blogLinksByPath = {
       text: "Insumos y soporte como parte de la continuidad productiva.",
     },
   ],
-
   "/rubros/comunicacion-visual": [
     {
       title: "Impresión UV para packaging y comunicación visual",
@@ -301,63 +302,87 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
     </section>
 
     {
-    currentRubroKey === "textil" ? (
-      <RubroEquipmentGroups
-        families={familiasRubros.textil}
-        equipment={equiposTextil}
-        rubroLabel="Industria textil"
-      />
-    ) : (
-      equiposDelRubro.length > 0 && (
-        <section class="rubro-equipment">
-          <div class="rubro-section__inner">
-            <header class="rubro-section__heading">
-              <p class="rubro-eyebrow">Equipos y soluciones</p>
+      currentRubroKey === "textil" ? (
+        <RubroEquipmentGroups
+          families={familiasRubros.textil}
+          equipment={equiposTextil}
+          rubroLabel="Industria textil"
+        />
+      ) : currentRubroKey === "packaging" ? (
+        <RubroEquipmentGroups
+          families={familiasRubros.packaging}
+          equipment={equiposPackaging}
+          rubroLabel="Packaging"
+        />
+      ) : currentRubroKey === "comunicacionVisual" ? (
+        <RubroEquipmentGroups
+          families={familiasRubros.comunicacionVisual}
+          equipment={equiposComunicacionVisual}
+          rubroLabel="Comunicación visual"
+        />
+      ) : currentRubroKey === "etiquetas" ? (
+        <RubroEquipmentGroups
+          families={familiasRubros.etiquetas}
+          equipment={equiposEtiquetas}
+          rubroLabel="Etiquetas"
+        />
+      ) : currentRubroKey === "editorial" ? (
+        <RubroEquipmentGroups
+          families={familiasRubros.editorial}
+          equipment={equiposEditorial}
+          rubroLabel="Editorial"
+        />
+      ) : (
+        equiposDelRubro.length > 0 && (
+          <section class="rubro-equipment">
+            <div class="rubro-section__inner">
+              <header class="rubro-section__heading">
+                <p class="rubro-eyebrow">Equipos y soluciones</p>
 
-              <h2>
-                Soluciones que pueden evaluarse para este rubro.
-              </h2>
+                <h2>
+                  Soluciones que pueden evaluarse para este rubro.
+                </h2>
 
-              <p>
-                La selección final depende del material, formato, volumen,
-                terminación esperada y proceso actual de producción.
-              </p>
-            </header>
+                <p>
+                  La selección final depende del material, formato, volumen,
+                  terminación esperada y proceso actual de producción.
+                </p>
+              </header>
 
-            <div class="rubro-equipment__grid">
-              {
-                equiposDelRubro.map((item) => (
-                  <a
-                    href={`/equipos/${item.id}`}
-                    class="rubro-equipment-card"
-                  >
-                    <div class="rubro-equipment-card__image">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
+              <div class="rubro-equipment__grid">
+                {
+                  equiposDelRubro.map((item) => (
+                    <a
+                      href={`/equipos/${item.id}`}
+                      class="rubro-equipment-card"
+                    >
+                      <div class="rubro-equipment-card__image">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
 
-                    <div class="rubro-equipment-card__content">
-                      <span>{item.category}</span>
-                      <h3>{item.name}</h3>
-                      <p>{item.description}</p>
-                    </div>
+                      <div class="rubro-equipment-card__content">
+                        <span>{item.category}</span>
+                        <h3>{item.name}</h3>
+                        <p>{item.description}</p>
+                      </div>
 
-                    <div class="rubro-equipment-card__tags">
-                      {item.tags.map((tag) => <small>{tag}</small>)}
-                    </div>
-                  </a>
-                ))
-              }
+                      <div class="rubro-equipment-card__tags">
+                        {item.tags.map((tag) => <small>{tag}</small>)}
+                      </div>
+                    </a>
+                  ))
+                }
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )
       )
-    )
-  }
+    }
 
     <section class="rubro-benefits">
       <div class="rubro-section__inner rubro-benefits__inner">

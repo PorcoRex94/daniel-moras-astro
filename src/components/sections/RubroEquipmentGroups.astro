@@ -12,10 +12,30 @@ const getEquipment = (familyId, subgroupId) =>
         item.family === familyId &&
         item.subgroup === subgroupId,
     )
-    .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    .sort((a, b) => {
+      const featuredA = a.featured ? -1 : 0;
+      const featuredB = b.featured ? -1 : 0;
+
+      if (featuredA !== featuredB) {
+        return featuredA - featuredB;
+      }
+
+      return (a.order ?? 999) - (b.order ?? 999);
+    });
 
 const getFamilyCount = (familyId) =>
   equipment.filter((item) => item.family === familyId).length;
+
+const getSubgroupCount = (familyId, subgroupId) =>
+  equipment.filter(
+    (item) =>
+      item.family === familyId &&
+      item.subgroup === subgroupId,
+  ).length;
+
+const visibleFamilies = families.filter(
+  (family) => getFamilyCount(family.id) > 0,
+);
 ---
 
 <section
@@ -31,41 +51,61 @@ const getFamilyCount = (familyId) =>
       </h2>
 
       <p>
-        Explorá las familias de equipos disponibles para {rubroLabel}.
-        La configuración adecuada depende del material, el volumen, el formato
-        y el proceso que necesitás resolver.
+        Explorá las familias disponibles para {rubroLabel}. La elección final
+        depende del material, el volumen, el ancho, el acabado y el proceso que
+        necesitás resolver.
       </p>
     </header>
 
-    <nav
-      class="rubro-family-navigation"
-      aria-label={`Familias de equipos para ${rubroLabel}`}
+    <div
+      class="rubro-process-index"
+      aria-label={`Índice de soluciones para ${rubroLabel}`}
     >
-      {
-        families.map((family) => (
-          <a href={`#familia-${family.id}`}>
-            <span>{family.number}</span>
+      <div class="rubro-process-index__intro">
+        <span>Índice de soluciones</span>
 
-            <strong>{family.title}</strong>
+        <p>
+          Elegí una etapa del proceso para ir directo a los equipos
+          correspondientes.
+        </p>
+      </div>
 
-            <small>
-              {getFamilyCount(family.id)}
-              {" "}
-              {getFamilyCount(family.id) === 1 ? "equipo" : "equipos"}
-            </small>
-          </a>
-        ))
-      }
-    </nav>
+      <nav
+        class="rubro-family-navigation"
+        aria-label={`Familias de equipos para ${rubroLabel}`}
+      >
+        {
+          visibleFamilies.map((family) => {
+            const total = getFamilyCount(family.id);
+
+            return (
+              <a href={`#familia-${family.id}`} class="rubro-family-link">
+                <span class="rubro-family-link__number">
+                  {family.number}
+                </span>
+
+                <span class="rubro-family-link__content">
+                  <strong>{family.title}</strong>
+
+                  <small>
+                    {total} {total === 1 ? "equipo" : "equipos"}
+                  </small>
+                </span>
+
+                <span class="rubro-family-link__arrow" aria-hidden="true">
+                  ↓
+                </span>
+              </a>
+            );
+          })
+        }
+      </nav>
+    </div>
 
     <div class="rubro-equipment-families">
       {
-        families.map((family) => {
+        visibleFamilies.map((family) => {
           const familyCount = getFamilyCount(family.id);
-
-          if (familyCount === 0) {
-            return null;
-          }
 
           return (
             <section
@@ -77,16 +117,12 @@ const getFamilyCount = (familyId) =>
                 <span>{family.number}</span>
 
                 <div>
-                  <h3 id={`titulo-${family.id}`}>
-                    {family.title}
-                  </h3>
-
+                  <h3 id={`titulo-${family.id}`}>{family.title}</h3>
                   <p>{family.description}</p>
                 </div>
 
                 <small>
-                  {familyCount}
-                  {" "}
+                  {familyCount}{" "}
                   {familyCount === 1 ? "equipo" : "equipos"}
                 </small>
               </header>
@@ -99,7 +135,12 @@ const getFamilyCount = (familyId) =>
                       subgroup.id,
                     );
 
-                    if (subgroupEquipment.length === 0) {
+                    const subgroupCount = getSubgroupCount(
+                      family.id,
+                      subgroup.id,
+                    );
+
+                    if (subgroupCount === 0) {
                       return null;
                     }
 
@@ -120,68 +161,116 @@ const getFamilyCount = (familyId) =>
                           </div>
 
                           <span>
-                            {subgroupEquipment.length}
-                            {" "}
-                            {subgroupEquipment.length === 1
-                              ? "modelo"
-                              : "modelos"}
+                            {subgroupCount}{" "}
+                            {subgroupCount === 1 ? "modelo" : "modelos"}
                           </span>
                         </header>
 
                         <div class="rubro-equipment-subgroup__grid">
                           {
-                            subgroupEquipment.map((item) => (
-                              <article class="rubro-equipment-product">
-                                <div class="rubro-equipment-product__image">
-                                  <img
-                                    src={item.image}
-                                    alt={`${item.brand} ${item.name}`}
-                                    width="720"
-                                    height="480"
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
+                            subgroupEquipment.map((item) => {
+                              const cardClass = item.featured
+                                ? "rubro-equipment-product rubro-equipment-product--featured"
+                                : "rubro-equipment-product";
 
-                                  {item.hasVideo && (
-                                    <span class="rubro-equipment-product__video">
-                                      Video disponible
-                                    </span>
-                                  )}
-                                </div>
+                              return (
+                                <article class={cardClass}>
+                                  <div class="rubro-equipment-product__image">
+                                    {
+                                      item.featured && (
+                                        <span class="rubro-equipment-product__featured-ribbon">
+                                          {item.featuredLabel ??
+                                            "Equipo destacado"}
+                                        </span>
+                                      )
+                                    }
 
-                                <div class="rubro-equipment-product__content">
-                                  <p class="rubro-equipment-product__brand">
-                                    {item.brand}
-                                  </p>
+                                    <img
+                                      src={item.image}
+                                      alt={`${item.name}, equipo de ${item.brand}`}
+                                      width="720"
+                                      height="480"
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
 
-                                  <h5>{item.name}</h5>
+                                    {
+                                      item.video && (
+                                        <span class="rubro-equipment-product__video">
+                                          Video disponible
+                                        </span>
+                                      )
+                                    }
+                                  </div>
 
-                                  <p>{item.shortDescription}</p>
-                                </div>
+                                  <div class="rubro-equipment-product__content">
+                                    {
+                                      item.featured && (
+                                        <span class="rubro-equipment-product__featured">
+                                          {item.featuredLabel ??
+                                            "Equipo destacado"}
+                                        </span>
+                                      )
+                                    }
 
-                                <div class="rubro-equipment-product__footer">
-                                  {item.hasPdf && (
-                                    <span>Ficha técnica disponible</span>
-                                  )}
+                                    <p class="rubro-equipment-product__brand">
+                                      {item.brand}
+                                    </p>
 
-                                  {
-                                    item.pageReady ? (
-                                      <a href={`/equipos/${item.id}`}>
-                                        Ver equipo
-                                        <span aria-hidden="true">→</span>
-                                      </a>
-                                    ) : (
-                                      <a
-                                        href={`/#contacto?equipo=${encodeURIComponent(item.name)}`}
-                                      >
-                                        Consultar
-                                        <span aria-hidden="true">→</span>
-                                      </a>
-                                    )
-                                  }
-                                </div>
-                              </article>
-                            ))
+                                    <h5>{item.name}</h5>
+
+                                    <p>{item.shortDescription}</p>
+
+                                    {
+                                      item.featured && item.featuredText && (
+                                        <p class="rubro-equipment-product__featured-text">
+                                          {item.featuredText}
+                                        </p>
+                                      )
+                                    }
+                                  </div>
+
+                                  <div class="rubro-equipment-product__footer">
+                                    {
+                                      item.pdf ? (
+                                        <a
+                                          href={item.pdf}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          class="rubro-equipment-product__document"
+                                        >
+                                          Ficha técnica
+                                        </a>
+                                      ) : (
+                                        <span>Información a consultar</span>
+                                      )
+                                    }
+
+                                    {
+                                      item.pageReady ? (
+                                        <a
+                                          href={`/equipos/${item.id}`}
+                                          aria-label={`Ver información de ${item.name}`}
+                                        >
+                                          Ver equipo
+                                          <span aria-hidden="true">→</span>
+                                        </a>
+                                      ) : (
+                                        <a
+                                          href={`/#contacto?equipo=${encodeURIComponent(
+                                            item.name,
+                                          )}`}
+                                          aria-label={`Consultar por ${item.name}`}
+                                        >
+                                          Consultar
+                                          <span aria-hidden="true">→</span>
+                                        </a>
+                                      )
+                                    }
+                                  </div>
+                                </article>
+                              );
+                            })
                           }
                         </div>
                       </section>
