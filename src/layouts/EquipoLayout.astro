@@ -1,220 +1,339 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import { equipos } from "../data/equipos";
+import { getEquiposRelacionados } from "../data/equiposIndex";
 
 const { equipo } = Astro.props;
 
+const siteUrl =
+  Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+
+const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+
 const rubroLabels = {
-  packaging: "Packaging",
   textil: "Industria textil",
-  editorial: "Editorial",
-  etiquetas: "Etiquetas",
+  packaging: "Packaging",
   comunicacionVisual: "Comunicación visual",
+  etiquetas: "Etiquetas",
+  editorial: "Editorial",
 };
 
 const rubroUrls = {
-  packaging: "/rubros/packaging",
   textil: "/rubros/textil",
-  editorial: "/rubros/editorial",
-  etiquetas: "/rubros/etiquetas",
+  packaging: "/rubros/packaging",
   comunicacionVisual: "/rubros/comunicacion-visual",
+  etiquetas: "/rubros/etiquetas",
+  editorial: "/rubros/editorial",
 };
 
-const relatedEquipos = equipos
-  .filter(
-    (item) =>
-      item.id !== equipo.id &&
-      item.rubros.some((rubro) => equipo.rubros.includes(rubro)),
-  )
-  .slice(0, 3);
+const formatLabel = (value = "") =>
+  value
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
-const siteUrl = Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
-const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const familyLabel = formatLabel(equipo.family);
+const subgroupLabel = formatLabel(equipo.subgroup);
 
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Inicio",
-      item: siteUrl,
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Equipos",
-      item: `${siteUrl}/equipos`,
-    },
-    {
-      "@type": "ListItem",
-      position: 3,
-      name: equipo.name,
-      item: pageUrl,
-    },
-  ],
-};
+const relatedEquipment = getEquiposRelacionados(equipo, 3);
 
-const pageSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${pageUrl}#webpage`,
-  name: equipo.name,
-  description: equipo.description,
-  url: pageUrl,
-  image: new URL(equipo.image, siteUrl).toString(),
-};
+const title = `${equipo.name} | ${equipo.brand} | Daniel Moras`;
+
+const description =
+  equipo.metaDescription ??
+  equipo.longDescription ??
+  equipo.shortDescription ??
+  `Información técnica y consulta comercial por ${equipo.name}.`;
+
+const applications = (equipo.applications ?? []).map((item) =>
+  typeof item === "string" ? { title: item, text: "" } : item,
+);
+
+const features = (equipo.features ?? []).map((item) =>
+  typeof item === "string" ? { title: "", text: item } : item,
+);
+
+const consultationNotes = equipo.consultationNotes ?? [
+  "Material a imprimir.",
+  "Formato de trabajo.",
+  "Volumen estimado de producción.",
+  "Tipo de terminación posterior.",
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    name: title,
+    description,
+    url: pageUrl,
+    image: new URL(equipo.image, siteUrl).toString(),
+    inLanguage: "es-AR",
+    about: {
+      "@type": "Thing",
+      name: `${equipo.brand} ${equipo.name}`,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Equipos",
+        item: `${siteUrl}/equipos`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: equipo.name,
+        item: pageUrl,
+      },
+    ],
+  },
+];
+
+const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
 ---
 
 <BaseLayout
-  title={`${equipo.name} | Daniel Moras`}
-  description={equipo.description}
+  title={title}
+  description={description}
   image={equipo.image}
-  schema={[breadcrumbSchema, pageSchema]}
+  type="article"
+  schema={schema}
 >
   <main class="equipo-page">
-    <section class="equipo-hero">
-      <div class="equipo-hero__inner">
-        <div class="equipo-hero__content">
-          <nav class="equipo-breadcrumbs" aria-label="Breadcrumb">
-            <a href="/">Inicio</a>
-            <span>/</span>
-            <a href="/equipos">Equipos</a>
-            <span>/</span>
-            <strong>{equipo.name}</strong>
-          </nav>
+    <section class="equipo-hero equipo-hero--floating">
+      <div class="equipo-hero__inner equipo-floating-hero__inner">
+        <nav class="equipo-breadcrumbs equipo-floating-hero__breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Inicio</a>
+          <span aria-hidden="true">/</span>
+          <a href="/equipos">Equipos</a>
+          <span aria-hidden="true">/</span>
+          <strong>{equipo.name}</strong>
+        </nav>
 
-          <p class="equipos-eyebrow">{equipo.category}</p>
-
-          <h1>{equipo.name}</h1>
-
-          <p>{equipo.description}</p>
-
-          <a href="/#contacto" class="equipo-hero__cta">
-            Consultar por esta solución
-          </a>
-        </div>
-
-        <div class="equipo-hero__media">
-          <img src={equipo.image} alt={equipo.name} />
-        </div>
-      </div>
-    </section>
-
-    <section class="equipo-detail">
-      <div class="equipos-section__inner equipo-detail__inner">
-        <div class="equipo-detail__main">
-          {
-            equipo.video?.url && (
-              <section class="equipo-video">
-                <header>
-                  <p class="equipos-eyebrow">Video</p>
-                  <h2>Video del equipo o solución.</h2>
-                </header>
-
-                <div class="equipo-video__frame">
-                  <iframe
-                    src={equipo.video.url}
-                    title={`Video de ${equipo.name}`}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                  />
-                </div>
-              </section>
-            )
-          }
-
-          <section class="equipo-info-block">
-            <header>
-              <p class="equipos-eyebrow">Aplicaciones</p>
-              <h2>Aplicaciones frecuentes.</h2>
-            </header>
-
-            <div class="equipo-list">
-              {
-                equipo.applications.map((item) => (
-                  <article>
-                    <span>✓</span>
-                    <p>{item}</p>
-                  </article>
-                ))
-              }
-            </div>
-          </section>
-
-          <section class="equipo-info-block">
-            <header>
-              <p class="equipos-eyebrow">Características</p>
-              <h2>Aspectos a evaluar.</h2>
-            </header>
-
-            <div class="equipo-list">
-              {
-                equipo.features.map((item) => (
-                  <article>
-                    <span>•</span>
-                    <p>{item}</p>
-                  </article>
-                ))
-              }
-            </div>
-          </section>
-        </div>
-
-        <aside class="equipo-detail__aside">
-          <div class="equipo-aside-card">
-            <p class="equipos-eyebrow">Rubros</p>
-
-            <h2>Rubros donde puede aplicar.</h2>
-
-            <div class="equipo-rubros">
-              {
-                equipo.rubros.map((rubro) => (
-                  <a href={rubroUrls[rubro]}>
-                    {rubroLabels[rubro]}
-                  </a>
-                ))
-              }
-            </div>
-          </div>
-
-          <div class="equipo-aside-card equipo-aside-card--dark">
-            <h2>¿Querés evaluar esta solución?</h2>
-
-            <p>
-              Contanos material, volumen, aplicación y proceso actual para
-              orientar mejor la recomendación.
+        <div class="equipo-floating-hero">
+          <div class="equipo-floating-hero__content">
+            <p class="equipo-eyebrow">
+              {rubroLabels[equipo.rubro]} · {equipo.brand}
             </p>
 
-            <a href="/#contacto">Hacer una consulta</a>
+            <h1>{equipo.name}</h1>
+
+            <p class="equipo-hero__description">
+              {equipo.longDescription ?? equipo.shortDescription}
+            </p>
+
+            <div class="equipo-floating-hero__note">
+              <strong>Una solución para evaluar según producción real.</strong>
+              <p>
+                La elección correcta depende del material, el volumen, la
+                terminación posterior y el flujo de trabajo que necesitás
+                sostener.
+              </p>
+            </div>
+
+            <div class="equipo-hero__actions equipo-floating-hero__actions">
+              <a href={contactHref} class="equipo-button equipo-button--primary">
+                Consultar por este equipo
+              </a>
+
+              {
+                equipo.pdf && (
+                  <a
+                    href={equipo.pdf}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="equipo-button equipo-button--secondary"
+                  >
+                    Ver ficha técnica
+                  </a>
+                )
+              }
+            </div>
           </div>
-        </aside>
+
+          <div class="equipo-floating-hero__visual" aria-hidden="true">
+            <div class="equipo-floating-hero__halo"></div>
+
+            <img
+              src={equipo.image}
+              alt=""
+              width="1400"
+              height="820"
+              loading="eager"
+              decoding="async"
+            />
+
+            <div class="equipo-floating-hero__shadow"></div>
+          </div>
+        </div>
+
+        <div class="equipo-floating-facts" aria-label="Datos rápidos del equipo">
+          <article>
+            <span>Marca</span>
+            <strong>{equipo.brand}</strong>
+          </article>
+
+          <article>
+            <span>Rubro</span>
+            <a href={rubroUrls[equipo.rubro]}>
+              {rubroLabels[equipo.rubro]}
+            </a>
+          </article>
+
+          <article>
+            <span>Familia</span>
+            <strong>{familyLabel}</strong>
+          </article>
+
+          <article>
+            <span>Aplicación</span>
+            <strong>{subgroupLabel}</strong>
+          </article>
+
+          <article>
+            <span>Ficha técnica</span>
+            {
+              equipo.pdf ? (
+                <a href={equipo.pdf} target="_blank" rel="noopener noreferrer">
+                  Disponible
+                </a>
+              ) : (
+                <strong>A consultar</strong>
+              )
+            }
+          </article>
+        </div>
+
+        <div class="equipo-floating-consult">
+          <span>Para orientar mejor la consulta</span>
+
+          <ul>
+            {consultationNotes.slice(0, 5).map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
       </div>
     </section>
 
     {
-      relatedEquipos.length > 0 && (
-        <section class="equipos-related">
-          <div class="equipos-section__inner">
-            <header class="equipos-section__heading">
-              <p class="equipos-eyebrow">Relacionados</p>
-              <h2>Otros equipos que pueden interesarte.</h2>
+      applications.length > 0 && (
+        <section class="equipo-section equipo-section--soft">
+          <div class="equipo-section__inner">
+            <header class="equipo-section__heading">
+              <p class="equipo-eyebrow">Aplicaciones</p>
+
+              <h2>Qué tipo de producción puede resolver este equipo.</h2>
+
+              <p>
+                Cada aplicación depende del material, la exigencia de producción,
+                el tipo de terminación y el resultado que se busca lograr.
+              </p>
             </header>
 
-            <div class="equipos-grid equipos-grid--related">
-              {relatedEquipos.map((item) => (
-                <a href={`/equipos/${item.id}`} class="equipo-card">
-                  <div class="equipo-card__image">
-                    <img src={item.image} alt={item.name} loading="lazy" />
+            <div class="equipo-applications-grid">
+              {applications.map((item) => (
+                <article class="equipo-application-card">
+                  <span class="equipo-application-card__icon" aria-hidden="true">
+                    ✓
+                  </span>
+
+                  <div>
+                    <h3>{item.title}</h3>
+                    {item.text && <p>{item.text}</p>}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      features.length > 0 && (
+        <section class="equipo-section">
+          <div class="equipo-section__inner">
+            <header class="equipo-section__heading">
+              <p class="equipo-eyebrow">Puntos principales</p>
+
+              <h2>Aspectos importantes para evaluar esta solución.</h2>
+            </header>
+
+            <div class="equipo-feature-list">
+              {features.map((item, index) => (
+                <article>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+
+                  <div>
+                    {item.title && <h3>{item.title}</h3>}
+                    <p>{item.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      equipo.video && (
+        <section class="equipo-section equipo-section--soft">
+          <div class="equipo-section__inner">
+            <header class="equipo-section__heading">
+              <p class="equipo-eyebrow">Video</p>
+
+              <h2>Material audiovisual del equipo.</h2>
+            </header>
+
+            <div class="equipo-video">
+              <iframe
+                src={equipo.video}
+                title={`Video de ${equipo.name}`}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              />
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      relatedEquipment.length > 0 && (
+        <section class="equipo-section">
+          <div class="equipo-section__inner">
+            <header class="equipo-section__heading">
+              <p class="equipo-eyebrow">También puede interesarte</p>
+
+              <h2>Otros equipos del mismo rubro.</h2>
+            </header>
+
+            <div class="equipo-related__grid">
+              {relatedEquipment.map((item) => (
+                <a href={`/equipos/${item.id}`} class="equipo-related-card">
+                  <div class="equipo-related-card__image">
+                    <img
+                      src={item.image}
+                      alt={`${item.name}, equipo de ${item.brand}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
 
-                  <div class="equipo-card__content">
-                    <span>{item.category}</span>
-                    <h2>{item.name}</h2>
-                    <p>{item.description}</p>
-                  </div>
+                  <span>{item.brand}</span>
+                  <strong>{item.name}</strong>
+                  <p>{item.shortDescription}</p>
                 </a>
               ))}
             </div>
@@ -222,5 +341,20 @@ const pageSchema = {
         </section>
       )
     }
+
+    <section class="equipo-final-cta">
+      <div class="equipo-final-cta__inner">
+        <p class="equipo-eyebrow">{equipo.brand}</p>
+
+        <h2>Contanos qué necesitás producir y evaluamos si este equipo encaja.</h2>
+
+        <p>
+          Si compartís material, volumen, formato y objetivo productivo, la
+          recomendación puede ser mucho más precisa.
+        </p>
+
+        <a href={contactHref}>Hacer una consulta</a>
+      </div>
+    </section>
   </main>
 </BaseLayout>

@@ -1,0 +1,21 @@
+---
+import EquipoLayout from "../../layouts/EquipoLayout.astro";
+import { equiposPublicados, getEquipoById } from "../../data/equiposIndex";
+
+export function getStaticPaths() {
+  return equiposPublicados.map((equipo) => ({
+    params: {
+      id: equipo.id,
+    },
+  }));
+}
+
+const { id } = Astro.params;
+const equipo = getEquipoById(id);
+
+if (!equipo || !equipo.pageReady) {
+  return Astro.redirect("/equipos");
+}
+---
+
+<EquipoLayout equipo={equipo} />

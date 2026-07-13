@@ -3,22 +3,33 @@ const {
   families = [],
   equipment = [],
   rubroLabel = "Industria textil",
+  useWideCards = false,
 } = Astro.props;
+
+const brandLogos = {
+  Allwin: "/images/logos/marcas/logo-allwin.svg",
+  Flora: "/images/logos/marcas/logo-flora.svg",
+  "HD Digital": "/images/logos/marcas/logo-hd-digital.png",
+  iECHO: "/images/logos/marcas/logo-iecho.svg",
+  Saga: "/images/logos/marcas/logo-saga.svg",
+  Kartech: "/images/logos/marcas/logo-kartech.webp",
+  Fayon: "/images/logos/marcas/logo-fayon.svg",
+  Unikonex: "/images/logos/marcas/logo-unikonex.svg",
+  DIJI: "/images/logos/marcas/logo-diji.svg",
+  Pengda: "/images/logos/marcas/logo-pengda.svg",
+  "Industrial Inkjet": "/images/logos/marcas/logo-industrial-inkjet.svg",
+};
+
+const featuredEquipment = equipment
+  .filter((item) => item.featured)
+  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
 const getEquipment = (familyId, subgroupId) =>
   equipment
-    .filter(
-      (item) =>
-        item.family === familyId &&
-        item.subgroup === subgroupId,
-    )
+    .filter((item) => item.family === familyId && item.subgroup === subgroupId)
     .sort((a, b) => {
-      const featuredA = a.featured ? -1 : 0;
-      const featuredB = b.featured ? -1 : 0;
-
-      if (featuredA !== featuredB) {
-        return featuredA - featuredB;
-      }
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
 
       return (a.order ?? 999) - (b.order ?? 999);
     });
@@ -28,18 +39,23 @@ const getFamilyCount = (familyId) =>
 
 const getSubgroupCount = (familyId, subgroupId) =>
   equipment.filter(
-    (item) =>
-      item.family === familyId &&
-      item.subgroup === subgroupId,
+    (item) => item.family === familyId && item.subgroup === subgroupId,
   ).length;
 
 const visibleFamilies = families.filter(
   (family) => getFamilyCount(family.id) > 0,
 );
+
+const shouldUseWideCards =
+  useWideCards ||
+  ["Packaging", "Editorial", "Etiquetas"].includes(rubroLabel);
 ---
 
 <section
-  class="rubro-equipment-groups"
+  class:list={[
+    "rubro-equipment-groups",
+    shouldUseWideCards && "rubro-equipment-groups--wide",
+  ]}
   aria-labelledby="equipment-groups-title"
 >
   <div class="rubro-section__inner">
@@ -56,6 +72,134 @@ const visibleFamilies = families.filter(
         necesitás resolver.
       </p>
     </header>
+
+    {
+      featuredEquipment.length > 0 && (
+        <section
+          class="rubro-featured-equipment"
+          aria-labelledby="featured-equipment-title"
+        >
+          <header class="rubro-featured-equipment__header">
+            <p class="rubro-eyebrow">Selección recomendada</p>
+
+            <h3 id="featured-equipment-title">
+              Equipo destacado para evaluar primero.
+            </h3>
+
+            <p>
+              Una alternativa principal dentro de este rubro para iniciar la
+              consulta y comparar luego con otras soluciones disponibles.
+            </p>
+          </header>
+
+          <div class="rubro-featured-equipment__grid">
+            {
+              featuredEquipment.map((item) => (
+                <article class="rubro-equipment-product rubro-equipment-product--featured">
+                  <div class="rubro-equipment-product__image">
+                    <span class="rubro-equipment-product__featured-ribbon">
+                      {item.featuredLabel ?? "Equipo destacado"}
+                    </span>
+
+                    <img
+                      src={item.image}
+                      alt={`${item.name}, equipo de ${item.brand}`}
+                      width="720"
+                      height="480"
+                      loading="lazy"
+                      decoding="async"
+                    />
+
+                    {
+                      item.video && (
+                        <span class="rubro-equipment-product__video">
+                          Video disponible
+                        </span>
+                      )
+                    }
+                  </div>
+
+                  <div class="rubro-equipment-product__content">
+                    {
+                      brandLogos[item.brand] && (
+                        <img
+                          src={brandLogos[item.brand]}
+                          alt={`Logo ${item.brand}`}
+                          class="rubro-equipment-product__brand-logo"
+                          width="180"
+                          height="64"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )
+                    }
+
+                    <span class="rubro-equipment-product__featured">
+                      {item.featuredLabel ?? "Equipo destacado"}
+                    </span>
+
+                    <p class="rubro-equipment-product__brand">
+                      {item.brand}
+                    </p>
+
+                    <h5>{item.name}</h5>
+
+                    <p>{item.shortDescription}</p>
+
+                    {
+                      item.featuredText && (
+                        <p class="rubro-equipment-product__featured-text">
+                          {item.featuredText}
+                        </p>
+                      )
+                    }
+                  </div>
+
+                  <div class="rubro-equipment-product__footer">
+                    {
+                      item.pdf ? (
+                        <a
+                          href={item.pdf}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="rubro-equipment-product__document"
+                        >
+                          Ficha técnica
+                        </a>
+                      ) : (
+                        <span>Información a consultar</span>
+                      )
+                    }
+
+                    {
+                      item.pageReady ? (
+                        <a
+                          href={`/equipos/${item.id}`}
+                          aria-label={`Ver información de ${item.name}`}
+                        >
+                          Ver equipo
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      ) : (
+                        <a
+                          href={`/#contacto?equipo=${encodeURIComponent(
+                            item.name,
+                          )}`}
+                          aria-label={`Consultar por ${item.name}`}
+                        >
+                          Consultar
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      )
+                    }
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+      )
+    }
 
     <div
       class="rubro-process-index"
@@ -151,9 +295,7 @@ const visibleFamilies = families.filter(
                       >
                         <header class="rubro-equipment-subgroup__header">
                           <div>
-                            <h4
-                              id={`subgrupo-${family.id}-${subgroup.id}`}
-                            >
+                            <h4 id={`subgrupo-${family.id}-${subgroup.id}`}>
                               {subgroup.title}
                             </h4>
 
@@ -166,111 +308,115 @@ const visibleFamilies = families.filter(
                           </span>
                         </header>
 
-                        <div class="rubro-equipment-subgroup__grid">
+                        <div
+                          class:list={[
+                            "rubro-equipment-subgroup__grid",
+                            shouldUseWideCards &&
+                              "rubro-equipment-subgroup__grid--wide",
+                          ]}
+                        >
                           {
-                            subgroupEquipment.map((item) => {
-                              const cardClass = item.featured
-                                ? "rubro-equipment-product rubro-equipment-product--featured"
-                                : "rubro-equipment-product";
+                            subgroupEquipment.map((item) => (
+                              <article
+                                class:list={[
+                                  "rubro-equipment-product",
+                                  shouldUseWideCards &&
+                                    "rubro-equipment-product--wide",
+                                  item.featured &&
+                                    "rubro-equipment-product--inline-featured",
+                                ]}
+                              >
+                                <div class="rubro-equipment-product__image">
+                                  <img
+                                    src={item.image}
+                                    alt={`${item.name}, equipo de ${item.brand}`}
+                                    width="720"
+                                    height="480"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
 
-                              return (
-                                <article class={cardClass}>
-                                  <div class="rubro-equipment-product__image">
-                                    {
-                                      item.featured && (
-                                        <span class="rubro-equipment-product__featured-ribbon">
-                                          {item.featuredLabel ??
-                                            "Equipo destacado"}
-                                        </span>
-                                      )
-                                    }
+                                  {
+                                    item.video && (
+                                      <span class="rubro-equipment-product__video">
+                                        Video disponible
+                                      </span>
+                                    )
+                                  }
+                                </div>
 
-                                    <img
-                                      src={item.image}
-                                      alt={`${item.name}, equipo de ${item.brand}`}
-                                      width="720"
-                                      height="480"
-                                      loading="lazy"
-                                      decoding="async"
-                                    />
+                                <div class="rubro-equipment-product__content">
+                                  {
+                                    brandLogos[item.brand] && (
+                                      <img
+                                        src={brandLogos[item.brand]}
+                                        alt={`Logo ${item.brand}`}
+                                        class="rubro-equipment-product__brand-logo"
+                                        width="160"
+                                        height="56"
+                                        loading="lazy"
+                                        decoding="async"
+                                      />
+                                    )
+                                  }
 
-                                    {
-                                      item.video && (
-                                        <span class="rubro-equipment-product__video">
-                                          Video disponible
-                                        </span>
-                                      )
-                                    }
-                                  </div>
+                                  {
+                                    item.featured && (
+                                      <span class="rubro-equipment-product__inline-badge">
+                                        Destacado
+                                      </span>
+                                    )
+                                  }
 
-                                  <div class="rubro-equipment-product__content">
-                                    {
-                                      item.featured && (
-                                        <span class="rubro-equipment-product__featured">
-                                          {item.featuredLabel ??
-                                            "Equipo destacado"}
-                                        </span>
-                                      )
-                                    }
+                                  <p class="rubro-equipment-product__brand">
+                                    {item.brand}
+                                  </p>
 
-                                    <p class="rubro-equipment-product__brand">
-                                      {item.brand}
-                                    </p>
+                                  <h5>{item.name}</h5>
 
-                                    <h5>{item.name}</h5>
+                                  <p>{item.shortDescription}</p>
+                                </div>
 
-                                    <p>{item.shortDescription}</p>
+                                <div class="rubro-equipment-product__footer">
+                                  {
+                                    item.pdf ? (
+                                      <a
+                                        href={item.pdf}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="rubro-equipment-product__document"
+                                      >
+                                        Ficha técnica
+                                      </a>
+                                    ) : (
+                                      <span>Información a consultar</span>
+                                    )
+                                  }
 
-                                    {
-                                      item.featured && item.featuredText && (
-                                        <p class="rubro-equipment-product__featured-text">
-                                          {item.featuredText}
-                                        </p>
-                                      )
-                                    }
-                                  </div>
-
-                                  <div class="rubro-equipment-product__footer">
-                                    {
-                                      item.pdf ? (
-                                        <a
-                                          href={item.pdf}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          class="rubro-equipment-product__document"
-                                        >
-                                          Ficha técnica
-                                        </a>
-                                      ) : (
-                                        <span>Información a consultar</span>
-                                      )
-                                    }
-
-                                    {
-                                      item.pageReady ? (
-                                        <a
-                                          href={`/equipos/${item.id}`}
-                                          aria-label={`Ver información de ${item.name}`}
-                                        >
-                                          Ver equipo
-                                          <span aria-hidden="true">→</span>
-                                        </a>
-                                      ) : (
-                                        <a
-                                          href={`/#contacto?equipo=${encodeURIComponent(
-                                            item.name,
-                                          )}`}
-                                          aria-label={`Consultar por ${item.name}`}
-                                        >
-                                          Consultar
-                                          <span aria-hidden="true">→</span>
-                                        </a>
-                                      )
-                                    }
-                                  </div>
-                                </article>
-                              );
-                            })
+                                  {
+                                    item.pageReady ? (
+                                      <a
+                                        href={`/equipos/${item.id}`}
+                                        aria-label={`Ver información de ${item.name}`}
+                                      >
+                                        Ver equipo
+                                        <span aria-hidden="true">→</span>
+                                      </a>
+                                    ) : (
+                                      <a
+                                        href={`/#contacto?equipo=${encodeURIComponent(
+                                          item.name,
+                                        )}`}
+                                        aria-label={`Consultar por ${item.name}`}
+                                      >
+                                        Consultar
+                                        <span aria-hidden="true">→</span>
+                                      </a>
+                                    )
+                                  }
+                                </div>
+                              </article>
+                            ))
                           }
                         </div>
                       </section>

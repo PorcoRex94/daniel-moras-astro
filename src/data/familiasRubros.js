@@ -327,49 +327,49 @@ export const familiasRubros = {
   ],
 
   etiquetas: [
-    {
-      id: "impresion-etiquetas",
-      number: "01",
-      title: "Impresión digital de etiquetas",
-      description:
-        "Equipos para producir etiquetas en bobina, tiradas variables, cambios frecuentes, datos variables y aplicaciones comerciales.",
-      subgroups: [
-        {
-          id: "impresion-digital-etiquetas",
-          title: "Impresión digital en bobina",
-          description:
-            "Soluciones digitales para producir etiquetas, trabajos variables y tiradas cortas o medianas sin procesos tradicionales extensos.",
-        },
-        {
-          id: "motores-inkjet-etiquetas",
-          title: "Motores inkjet e integración",
-          description:
-            "Módulos inkjet para sumar impresión variable, codificación o personalización en líneas y procesos existentes.",
-        },
-      ],
-    },
-    {
-      id: "terminacion-etiquetas",
-      number: "02",
-      title: "Corte y terminación",
-      description:
-        "Sistemas para cortar, troquelar y terminar etiquetas digitales con mayor flexibilidad frente a cambios de diseño.",
-      subgroups: [
-        {
-          id: "troquelado-digital-etiquetas",
-          title: "Troquelado digital",
-          description:
-            "Equipos para cortar y terminar etiquetas digitales sin depender siempre de matrices físicas.",
-        },
-        {
-          id: "corte-laser-etiquetas",
-          title: "Corte láser",
-          description:
-            "Soluciones láser para corte de etiquetas en bobina, ideales para variabilidad, precisión y cambios frecuentes.",
-        },
-      ],
-    },
-  ],
+  {
+    id: "impresion-etiquetas",
+    number: "01",
+    title: "Impresión digital de etiquetas",
+    description:
+      "Equipos inkjet, sistemas digitales y motores de impresión para producción de etiquetas, materiales autoadhesivos y aplicaciones variables.",
+    subgroups: [
+      {
+        id: "inkjet-etiquetas",
+        title: "Equipos inkjet para etiquetas",
+        description:
+          "Soluciones digitales para producción de etiquetas, tiradas variables, trabajos en bobina y aplicaciones comerciales.",
+      },
+      {
+        id: "motores-inkjet-etiquetas",
+        title: "Motores inkjet e integración",
+        description:
+          "Sistemas para integrar impresión variable, codificación o personalización en líneas existentes.",
+      },
+    ],
+  },
+  {
+    id: "terminacion-etiquetas",
+    number: "02",
+    title: "Corte y terminación de etiquetas",
+    description:
+      "Soluciones para corte, troquelado digital, terminación láser y procesos posteriores en producción de etiquetas.",
+    subgroups: [
+      {
+        id: "corte-etiquetas",
+        title: "Corte digital de etiquetas",
+        description:
+          "Equipos para corte, troquelado digital y terminación de etiquetas o materiales autoadhesivos.",
+      },
+      {
+        id: "corte-laser-etiquetas",
+        title: "Corte láser de etiquetas",
+        description:
+          "Sistemas láser para terminación de etiquetas, bobinas, trabajos variables y aplicaciones autoadhesivas.",
+      },
+    ],
+  },
+],
 
   editorial: [
     {
