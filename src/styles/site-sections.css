@@ -1562,3 +1562,126 @@ html {
     display: none;
   }
 }
+
+/* =========================================================
+   Floating actions hard alignment fix
+   ========================================================= */
+
+.floating-actions {
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  grid-template-columns: 3.25rem;
+  justify-items: center;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Ambos botones ocupan exactamente la misma columna */
+.floating-actions__top,
+.floating-actions__chat {
+  position: relative;
+  inset: auto;
+  margin: 0;
+  transform: none;
+  box-sizing: border-box;
+}
+
+/* Scroll top */
+.floating-actions__top {
+  width: 3.25rem;
+  min-width: 3.25rem;
+  max-width: 3.25rem;
+  height: 3.25rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* WhatsApp compacto */
+.floating-actions--compact:not(.floating-actions--open) .floating-actions__chat {
+  width: 3.25rem;
+  min-width: 3.25rem;
+  max-width: 3.25rem;
+  height: 3.25rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+}
+
+/* Estado normal: puede abrirse como pastilla, pero alineada al centro de la columna */
+.floating-actions:not(.floating-actions--compact) .floating-actions__chat,
+.floating-actions--compact.floating-actions--open .floating-actions__chat {
+  width: auto;
+  min-width: 8.7rem;
+  max-width: none;
+  height: 3.25rem;
+  padding-inline: 1rem;
+  display: inline-flex;
+  justify-self: end;
+}
+
+/* Icono centrado real */
+.floating-actions--compact:not(.floating-actions--open) .floating-actions__icon {
+  position: static;
+  display: grid;
+  place-items: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.floating-actions--compact:not(.floating-actions--open) .floating-actions__icon svg {
+  display: block;
+  width: 1.45rem;
+  height: 1.45rem;
+  margin: 0;
+}
+
+/* Texto no ocupa espacio cuando está compacto */
+.floating-actions--compact:not(.floating-actions--open) .floating-actions__text {
+  position: absolute;
+  inset: auto;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+  .floating-actions {
+    right: 0.8rem;
+    bottom: 0.8rem;
+    grid-template-columns: 3.05rem;
+  }
+
+  .floating-actions__top,
+  .floating-actions--compact:not(.floating-actions--open) .floating-actions__chat,
+  .floating-actions__chat {
+    width: 3.05rem;
+    min-width: 3.05rem;
+    max-width: 3.05rem;
+    height: 3.05rem;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+  }
+
+  .floating-actions__text {
+    display: none;
+  }
+
+  .floating-actions__icon,
+  .floating-actions__icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}

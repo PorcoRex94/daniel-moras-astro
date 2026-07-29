@@ -97,17 +97,23 @@ const defaultMessage = messagesByPath[pathname] ?? fallbackMessage;
     const whatsappNumber = floatingActions.dataset.whatsappNumber;
     const defaultMessage = floatingActions.dataset.defaultMessage;
 
-    const toggleScrollTopButton = () => {
-      if (window.scrollY > 420) {
-        floatingActions.classList.add("floating-actions--show-top");
-      } else {
-        floatingActions.classList.remove("floating-actions--show-top");
-      }
+    const toggleFloatingState = () => {
+      const shouldShowTop = window.scrollY > 420;
+
+      floatingActions.classList.toggle(
+        "floating-actions--show-top",
+        shouldShowTop,
+      );
+
+      floatingActions.classList.toggle(
+        "floating-actions--compact",
+        shouldShowTop,
+      );
     };
 
-    toggleScrollTopButton();
+    toggleFloatingState();
 
-    window.addEventListener("scroll", toggleScrollTopButton, {
+    window.addEventListener("scroll", toggleFloatingState, {
       passive: true,
     });
 

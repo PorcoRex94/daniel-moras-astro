@@ -1,0 +1,278 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { getInsumosRelacionados } from "../data/insumosIndex";
+
+const { insumo } = Astro.props;
+
+const title = `${insumo.name} | Tintas e insumos | Daniel Moras`;
+
+const description =
+  insumo.metaDescription ??
+  insumo.shortDescription ??
+  `Consulta por ${insumo.name} para impresión digital e insumos DTF.`;
+
+const related = getInsumosRelacionados(insumo);
+
+const contactHref = `/?insumo=${encodeURIComponent(insumo.name)}#contacto`;
+
+const hasTechnicalInfo =
+  insumo.technicalSpecs?.length > 0 || insumo.presentations?.length > 0;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    inLanguage: "es-AR",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: "/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Insumos",
+        item: "/insumos",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: insumo.name,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <main class="insumo-detail-page">
+    <section class="insumo-detail-hero">
+      <div class="insumo-detail-hero__inner">
+        <nav class="insumo-breadcrumbs" aria-label="Migas de pan">
+          <a href="/">Inicio</a>
+          <span>/</span>
+          <a href="/insumos">Insumos</a>
+          <span>/</span>
+          <strong>{insumo.name}</strong>
+        </nav>
+
+        <div class="insumo-detail-hero__grid">
+          <div class="insumo-detail-hero__visual">
+            {insumo.brandLogo && (
+              <img
+                src={insumo.brandLogo}
+                alt={insumo.brand}
+                class="insumo-detail-hero__brand-logo"
+              />
+            )}
+
+            <img
+              src={insumo.image}
+              alt={`${insumo.name} - ${insumo.brand}`}
+              class="insumo-detail-hero__image"
+            />
+          </div>
+
+          <div class="insumo-detail-hero__content">
+            <p class="insumos-eyebrow">
+              {insumo.groupEyebrow} · {insumo.brand}
+            </p>
+
+            <h1>{insumo.name}</h1>
+
+            <p>
+              {insumo.longDescription ?? insumo.shortDescription}
+            </p>
+
+            <div class="insumo-detail-hero__actions">
+              <a href={contactHref} class="insumos-button insumos-button--primary">
+                Consultar por este insumo
+              </a>
+
+              <a href="/insumos" class="insumos-button insumos-button--secondary">
+                Volver a insumos
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {insumo.tags?.length > 0 && (
+          <div class="insumo-detail-tags" aria-label="Características principales">
+            {insumo.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="insumo-detail-info">
+      <div class="insumo-detail-info__inner">
+        <article class="insumo-detail-panel">
+          <p class="insumos-eyebrow">Aplicación</p>
+
+          <h2>Consulta orientada según equipo y proceso.</h2>
+
+          <p>
+            Este insumo se evalúa según la tecnología del equipo, el material de
+            trabajo, el tipo de producción y la aplicación final. Para evitar
+            incompatibilidades, conviene confirmar marca, modelo, tinta actual y
+            condiciones de uso antes de avanzar.
+          </p>
+        </article>
+
+        <article class="insumo-detail-panel insumo-detail-panel--accent">
+          <p class="insumos-eyebrow">Datos útiles</p>
+
+          <h2>Qué información ayuda para responder mejor.</h2>
+
+          <div class="insumo-detail-checklist">
+            <p>Marca y modelo del equipo.</p>
+            <p>Tipo de tinta o insumo requerido.</p>
+            <p>Material o sustrato principal.</p>
+            <p>Aplicación o problema a resolver.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    {hasTechnicalInfo && (
+      <section class="insumo-specs-section">
+        <div class="insumo-specs-section__inner">
+          <header class="insumos-section-heading">
+            <p class="insumos-eyebrow">Especificaciones</p>
+
+            <h2>Información técnica del producto.</h2>
+
+            <p>
+              Datos útiles para evaluar aplicación, compatibilidad y presentación
+              disponible antes de avanzar con la consulta.
+            </p>
+          </header>
+
+          <div class="insumo-specs-grid">
+            {insumo.technicalSpecs?.length > 0 && (
+              <article class="insumo-specs-card">
+                <h3>Características principales</h3>
+
+                <ul>
+                  {insumo.technicalSpecs.map((spec) => <li>{spec}</li>)}
+                </ul>
+              </article>
+            )}
+
+            {insumo.presentations?.length > 0 && (
+              <article class="insumo-specs-card insumo-specs-card--accent">
+                <h3>Presentaciones disponibles</h3>
+
+                <ul>
+                  {insumo.presentations.map((presentation) => (
+                    <li>{presentation}</li>
+                  ))}
+                </ul>
+              </article>
+            )}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {related.length > 0 && (
+      <section class="insumo-related">
+        <div class="insumo-related__inner">
+          <header class="insumos-section-heading">
+            <p class="insumos-eyebrow">Relacionados</p>
+
+            <h2>Otros insumos de la misma familia.</h2>
+
+            <p>
+              Productos vinculados dentro de la misma línea para seguir
+              evaluando alternativas o componentes complementarios.
+            </p>
+          </header>
+
+          <div class="insumos-products-grid">
+            {related.map((item) => (
+              <article class="insumos-product-card">
+                <div class="insumos-product-card__media">
+                  {item.brandLogo && (
+                    <img
+                      src={item.brandLogo}
+                      alt={item.brand}
+                      class="insumos-product-card__brand-logo"
+                      loading="lazy"
+                    />
+                  )}
+
+                  <img
+                    src={item.image}
+                    alt={`${item.name} - ${item.brand}`}
+                    class="insumos-product-card__image"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div class="insumos-product-card__body">
+                  <p class="insumos-product-card__brand">{item.brand}</p>
+
+                  <h3>{item.name}</h3>
+
+                  <p>{item.shortDescription}</p>
+
+                  {item.tags?.length > 0 && (
+                    <ul>
+                      {item.tags.map((tag) => <li>{tag}</li>)}
+                    </ul>
+                  )}
+
+                  <a href={`/insumos/${item.id}`}>Ver insumo</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="insumos-final-cta">
+      <div class="insumos-final-cta__inner">
+        <p class="insumos-eyebrow">Consulta técnica</p>
+
+        <h2>Contanos qué equipo usás y qué tinta o insumo necesitás.</h2>
+
+        <p>
+          Con marca, modelo, tecnología, insumo actual y aplicación podemos
+          orientar mejor la consulta y evitar incompatibilidades.
+        </p>
+
+        <a href={contactHref}>Consultar por {insumo.name}</a>
+      </div>
+    </section>
+
+    <footer class="site-footer-industrial">
+      <div class="site-footer-industrial__inner">
+        <a href="/" class="site-footer-industrial__brand" aria-label="Daniel Moras - Inicio">
+          <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" />
+        </a>
+
+        <nav aria-label="Navegación de cierre">
+          <a href="/">Inicio</a>
+          <a href="/#rubros">Rubros</a>
+          <a href="/insumos">Insumos</a>
+          <a href="/blog">Blog</a>
+          <a href="/#contacto">Contacto</a>
+        </nav>
+
+        <p>
+          Sitio desarrollado por <strong>Ambraco</strong>.
+        </p>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>

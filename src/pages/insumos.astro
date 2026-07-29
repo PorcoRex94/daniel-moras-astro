@@ -1,0 +1,209 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  gruposInsumos,
+  familiasHeroInsumos,
+  datosConsultaInsumos,
+  consultaRepuestos,
+} from "../data/insumos";
+
+const title = "Tintas e insumos DTF | Daniel Moras";
+
+const description =
+  "Tintas para impresión digital e insumos para línea DTF. Consultas por tinta UV, sublimación, ecosolvente, solvente, tinta DTF, film DTF y polvo adhesivo.";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    inLanguage: "es-AR",
+  },
+];
+
+const slugifyInsumo = (value) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, "y")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <main class="insumos-page">
+    <section class="insumos-hero">
+      <div class="insumos-hero__inner">
+        <div class="insumos-hero__content">
+          <p class="insumos-eyebrow">Tintas · línea DTF · compatibilidad</p>
+
+          <h1>Tintas e insumos DTF para producción gráfica e industrial.</h1>
+
+          <p>
+            Tintas para impresión digital e insumos para línea DTF. Orientamos
+            la consulta según equipo, tecnología, aplicación, material y proceso
+            productivo.
+          </p>
+
+          <div class="insumos-hero__actions">
+            <a href="/#contacto" class="insumos-button insumos-button--primary">
+              Consultar por insumos
+            </a>
+
+            <a href="#linea-dtf" class="insumos-button insumos-button--secondary">
+              Ver línea DTF
+            </a>
+          </div>
+        </div>
+
+        <div class="insumos-hero-families" aria-label="Familias de tintas e insumos">
+          {familiasHeroInsumos.map((familia) => (
+            <a href={familia.href} class="insumos-hero-family">
+              <span>{familia.number}</span>
+
+              <div>
+                <strong>{familia.title}</strong>
+                <small>{familia.description}</small>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div class="insumos-catalog">
+      {gruposInsumos.map((grupo, groupIndex) => (
+        <section
+          id={grupo.id}
+          class:list={[
+            "insumos-catalog-group",
+            groupIndex % 2 === 1 && "insumos-catalog-group--green",
+          ]}
+        >
+          <div class="insumos-catalog-group__inner">
+            <header class="insumos-section-heading">
+              <p class="insumos-eyebrow">{grupo.eyebrow}</p>
+
+              <h2>{grupo.title}</h2>
+
+              <p>{grupo.description}</p>
+            </header>
+
+            <div class="insumos-products-grid">
+              {grupo.items.map((item) => {
+                const itemId = item.id ?? slugifyInsumo(item.name);
+
+                return (
+                  <article class="insumos-product-card">
+                    <div class="insumos-product-card__media">
+                      {item.brandLogo && (
+                        <img
+                          src={item.brandLogo}
+                          alt={item.brand}
+                          class="insumos-product-card__brand-logo"
+                          loading="lazy"
+                        />
+                      )}
+
+                      <img
+                        src={item.image}
+                        alt={`${item.name} - ${item.brand}`}
+                        class="insumos-product-card__image"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div class="insumos-product-card__body">
+                      <p class="insumos-product-card__brand">{item.brand}</p>
+
+                      <h3>{item.name}</h3>
+
+                      <p>{item.shortDescription}</p>
+
+                      {item.tags?.length > 0 && (
+                        <ul>
+                          {item.tags.map((tag) => <li>{tag}</li>)}
+                        </ul>
+                      )}
+
+                      <a href={`/insumos/${itemId}`}>Ver insumo</a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section class="insumos-consult-section">
+      <div class="insumos-consult-section__inner">
+        <div class="insumos-consult-panel">
+          <header>
+            <p class="insumos-eyebrow">Consulta técnica</p>
+
+            <h2>Datos útiles para orientar mejor la consulta.</h2>
+
+            <p>
+              Con algunos datos del equipo y del proceso podemos evaluar mejor
+              compatibilidad, necesidad real y alternativa conveniente.
+            </p>
+          </header>
+
+          <div class="insumos-consult-panel__grid">
+            {datosConsultaInsumos.map((item, index) => (
+              <article>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <p>{item}</p>
+              </article>
+            ))}
+          </div>
+
+          <div class="insumos-repuestos-note">
+            <strong>Consulta adicional</strong>
+            <p>{consultaRepuestos}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="insumos-final-cta">
+      <div class="insumos-final-cta__inner">
+        <p class="insumos-eyebrow">Tintas e insumos DTF</p>
+
+        <h2>Contanos qué equipo usás y qué tinta o insumo necesitás.</h2>
+
+        <p>
+          Si compartís marca, modelo, tecnología, insumo actual y aplicación,
+          podemos orientar mejor la consulta y evitar incompatibilidades.
+        </p>
+
+        <a href="/#contacto">Hacer una consulta</a>
+      </div>
+    </section>
+
+    <footer class="site-footer-industrial">
+      <div class="site-footer-industrial__inner">
+        <a href="/" class="site-footer-industrial__brand" aria-label="Daniel Moras - Inicio">
+          <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" />
+        </a>
+
+        <nav aria-label="Navegación de cierre">
+          <a href="/">Inicio</a>
+          <a href="/#rubros">Rubros</a>
+          <a href="/insumos">Insumos</a>
+          <a href="/blog">Blog</a>
+          <a href="/#contacto">Contacto</a>
+        </nav>
+
+        <p>
+          Sitio desarrollado por <strong>Guido</strong>. Soluciones web para
+          comunicación técnica, comercial e industrial.
+        </p>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>

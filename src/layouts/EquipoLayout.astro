@@ -52,8 +52,8 @@ const features = (equipo.features ?? []).map((item) =>
 );
 
 const consultationNotes = equipo.consultationNotes ?? [
-  "Material a imprimir.",
-  "Formato de trabajo.",
+  "Material o sustrato a trabajar.",
+  "Formato requerido.",
   "Volumen estimado de producción.",
   "Tipo de terminación posterior.",
 ];
@@ -109,10 +109,10 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
   type="article"
   schema={schema}
 >
-  <main class="equipo-page">
-    <section class="equipo-hero equipo-hero--floating">
-      <div class="equipo-hero__inner equipo-floating-hero__inner">
-        <nav class="equipo-breadcrumbs equipo-floating-hero__breadcrumbs" aria-label="Breadcrumb">
+  <main class="equipo-page equipo-page--compact">
+    <section class="equipo-hero equipo-hero--compact-product">
+      <div class="equipo-product-shell">
+        <nav class="equipo-breadcrumbs equipo-product-shell__breadcrumbs" aria-label="Breadcrumb">
           <a href="/">Inicio</a>
           <span aria-hidden="true">/</span>
           <a href="/equipos">Equipos</a>
@@ -120,28 +120,21 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
           <strong>{equipo.name}</strong>
         </nav>
 
-        <div class="equipo-floating-hero">
-          <div class="equipo-floating-hero__content">
+        <div class="equipo-product-hero">
+          <div class="equipo-product-hero__label">
             <p class="equipo-eyebrow">
               {rubroLabels[equipo.rubro]} · {equipo.brand}
             </p>
+          </div>
 
+          <div class="equipo-product-hero__text">
             <h1>{equipo.name}</h1>
 
-            <p class="equipo-hero__description">
+            <p class="equipo-product-hero__description">
               {equipo.longDescription ?? equipo.shortDescription}
             </p>
 
-            <div class="equipo-floating-hero__note">
-              <strong>Una solución para evaluar según producción real.</strong>
-              <p>
-                La elección correcta depende del material, el volumen, la
-                terminación posterior y el flujo de trabajo que necesitás
-                sostener.
-              </p>
-            </div>
-
-            <div class="equipo-hero__actions equipo-floating-hero__actions">
+            <div class="equipo-product-hero__actions">
               <a href={contactHref} class="equipo-button equipo-button--primary">
                 Consultar por este equipo
               </a>
@@ -161,23 +154,23 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
             </div>
           </div>
 
-          <div class="equipo-floating-hero__visual" aria-hidden="true">
-            <div class="equipo-floating-hero__halo"></div>
+          <div class="equipo-product-hero__visual">
+            <div class="equipo-product-hero__glow"></div>
 
             <img
               src={equipo.image}
-              alt=""
+              alt={`${equipo.name}, equipo de ${equipo.brand}`}
               width="1400"
               height="820"
               loading="eager"
               decoding="async"
             />
 
-            <div class="equipo-floating-hero__shadow"></div>
+            <div class="equipo-product-hero__shadow"></div>
           </div>
         </div>
 
-        <div class="equipo-floating-facts" aria-label="Datos rápidos del equipo">
+        <div class="equipo-product-meta" aria-label="Datos rápidos del equipo">
           <article>
             <span>Marca</span>
             <strong>{equipo.brand}</strong>
@@ -213,72 +206,97 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
             }
           </article>
         </div>
-
-        <div class="equipo-floating-consult">
-          <span>Para orientar mejor la consulta</span>
-
-          <ul>
-            {consultationNotes.slice(0, 5).map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
       </div>
     </section>
 
     {
-      applications.length > 0 && (
-        <section class="equipo-section equipo-section--soft">
-          <div class="equipo-section__inner">
-            <header class="equipo-section__heading">
-              <p class="equipo-eyebrow">Aplicaciones</p>
+      (applications.length > 0 || features.length > 0) && (
+        <section class="equipo-insights">
+          <div class="equipo-insights__inner">
+            <header class="equipo-insights__heading">
+              <p class="equipo-eyebrow">Aplicaciones y criterios</p>
 
-              <h2>Qué tipo de producción puede resolver este equipo.</h2>
+              <h2>Qué puede resolver y qué conviene evaluar antes de avanzar.</h2>
 
-              <p>
-                Cada aplicación depende del material, la exigencia de producción,
-                el tipo de terminación y el resultado que se busca lograr.
-              </p>
+                <p>
+                  La recomendación final depende del material, el volumen, el formato de
+                  trabajo, la terminación posterior y el proceso actual de producción. También
+                  conviene considerar tiempos de respuesta, cambios entre trabajos, integración
+                  con corte o finishing, disponibilidad de insumos y el tipo de resultado que se
+                  necesita sostener en el día a día.
+                </p>
             </header>
 
-            <div class="equipo-applications-grid">
-              {applications.map((item) => (
-                <article class="equipo-application-card">
-                  <span class="equipo-application-card__icon" aria-hidden="true">
-                    ✓
-                  </span>
+            <div class="equipo-insights__layout">
+              {
+                applications.length > 0 && (
+                  <div class="equipo-insights__block equipo-insights__block--applications">
+                    <div class="equipo-insights__block-heading">
+                      <span>01</span>
+                      <div>
+                        <h3>Producción posible</h3>
+                        <p>Aplicaciones donde este equipo puede aportar valor.</p>
+                      </div>
+                    </div>
 
-                  <div>
-                    <h3>{item.title}</h3>
-                    {item.text && <p>{item.text}</p>}
+                    <div class="equipo-insights__cards">
+                      {applications.map((item) => (
+                        <article class="equipo-insight-card">
+                          <span aria-hidden="true">✓</span>
+
+                          <div>
+                            <h4>{item.title}</h4>
+                            {item.text && <p>{item.text}</p>}
+                          </div>
+                        </article>
+                      ))}
+                    </div>
                   </div>
-                </article>
-              ))}
+                )
+              }
+
+              {
+                features.length > 0 && (
+                  <aside class="equipo-insights__block equipo-insights__block--features">
+                    <div class="equipo-insights__block-heading">
+                      <span>02</span>
+                      <div>
+                        <h3>Puntos principales</h3>
+                        <p>Criterios técnicos y comerciales para comparar.</p>
+                      </div>
+                    </div>
+
+                    <div class="equipo-feature-stack">
+                      {features.map((item, index) => (
+                        <article>
+                          <span>{String(index + 1).padStart(2, "0")}</span>
+
+                          <div>
+                            {item.title && <h4>{item.title}</h4>}
+                            <p>{item.text}</p>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </aside>
+                )
+              }
             </div>
-          </div>
-        </section>
-      )
-    }
 
-    {
-      features.length > 0 && (
-        <section class="equipo-section">
-          <div class="equipo-section__inner">
-            <header class="equipo-section__heading">
-              <p class="equipo-eyebrow">Puntos principales</p>
+            <div class="equipo-consult-panel">
+              <header>
+                <span>Para orientar mejor la consulta</span>
+                <h3>Datos útiles antes de recomendar una configuración.</h3>
+              </header>
 
-              <h2>Aspectos importantes para evaluar esta solución.</h2>
-            </header>
-
-            <div class="equipo-feature-list">
-              {features.map((item, index) => (
-                <article>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-
-                  <div>
-                    {item.title && <h3>{item.title}</h3>}
-                    <p>{item.text}</p>
-                  </div>
-                </article>
-              ))}
+              <div class="equipo-consult-panel__grid">
+                {consultationNotes.slice(0, 6).map((item, index) => (
+                  <article>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <p>{item}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -287,7 +305,7 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
 
     {
       equipo.video && (
-        <section class="equipo-section equipo-section--soft">
+        <section class="equipo-section equipo-section--compact-video">
           <div class="equipo-section__inner">
             <header class="equipo-section__heading">
               <p class="equipo-eyebrow">Video</p>
@@ -311,7 +329,7 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
 
     {
       relatedEquipment.length > 0 && (
-        <section class="equipo-section">
+        <section class="equipo-section equipo-section--compact-related">
           <div class="equipo-section__inner">
             <header class="equipo-section__heading">
               <p class="equipo-eyebrow">También puede interesarte</p>
@@ -342,19 +360,38 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
       )
     }
 
-    <section class="equipo-final-cta">
+    <section class="equipo-final-cta equipo-final-cta--compact">
       <div class="equipo-final-cta__inner">
         <p class="equipo-eyebrow">{equipo.brand}</p>
 
         <h2>Contanos qué necesitás producir y evaluamos si este equipo encaja.</h2>
 
         <p>
-          Si compartís material, volumen, formato y objetivo productivo, la
-          recomendación puede ser mucho más precisa.
+          Con algunos datos sobre material, volumen, formato y terminación,
+          podemos orientar mejor la consulta.
         </p>
 
         <a href={contactHref}>Hacer una consulta</a>
       </div>
     </section>
+
+    <footer class="equipo-footer">
+      <div class="equipo-footer__inner">
+        <a href="/" class="equipo-footer__brand" aria-label="Daniel Moras - Inicio">
+          <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" />
+        </a>
+
+        <nav aria-label="Navegación de cierre">
+          <a href="/">Inicio</a>
+          <a href="/#rubros">Rubros</a>
+          <a href="/blog">Blog</a>
+          <a href="/#contacto">Contacto</a>
+        </nav>
+
+        <p>
+          Developed by <strong>Ambraco</strong>.
+        </p>
+      </div>
+    </footer>
   </main>
 </BaseLayout>

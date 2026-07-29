@@ -1,0 +1,21 @@
+---
+import InsumoLayout from "../../layouts/InsumoLayout.astro";
+import { insumosPublicados, getInsumoById } from "../../data/insumosIndex";
+
+export function getStaticPaths() {
+  return insumosPublicados.map((insumo) => ({
+    params: {
+      id: insumo.id,
+    },
+  }));
+}
+
+const { id } = Astro.params;
+const insumo = getInsumoById(id);
+
+if (!insumo || !insumo.pageReady) {
+  return Astro.redirect("/insumos");
+}
+---
+
+<InsumoLayout insumo={insumo} />
