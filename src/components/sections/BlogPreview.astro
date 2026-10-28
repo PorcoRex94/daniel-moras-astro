@@ -2,61 +2,134 @@
 import Container from "../ui/Container.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 ---
 
-<section class="blog-preview" id="blog">
-  <div class="section-divider">
-    <span>Blog</span>
-  </div>
-
+<section class="blog-preview" id="blog" aria-labelledby="blog-preview-title">
   <Container>
-    <div class="blog-preview__heading">
-      <h2>Notas técnicas para tomar mejores decisiones.</h2>
+    <header class="blog-preview__heading">
+      <div>
+        <p class="blog-preview__eyebrow">Blog técnico</p>
+        <h2 id="blog-preview-title">Notas para tomar mejores decisiones.</h2>
+      </div>
 
       <p>
-        Contenidos pensados para entender tecnologías, aplicaciones, tintas,
-        materiales y criterios de inversión antes de elegir una solución de
-        impresión.
+        Contenidos sobre tecnologías, aplicaciones, tintas, materiales y
+        criterios de inversión antes de elegir una solución de impresión.
       </p>
-    </div>
 
-    <div class="blog-preview__grid">
-      {
-        posts.map((post) => (
-          <article class="blog-card">
-            <a
-              href={`/blog/${post.id}`}
-              class="blog-card__image"
-              aria-label={post.data.title}
-            >
-              <img src={post.data.image} alt={post.data.imageAlt ?? ""} />
-            </a>
+      <div class="blog-preview__actions">
+        <div class="blog-carousel__controls" aria-label="Navegación de notas técnicas">
+          <button type="button" class="blog-carousel__button" data-blog-previous aria-label="Ver notas anteriores" disabled>
+            <span aria-hidden="true">←</span>
+          </button>
+          <button type="button" class="blog-carousel__button" data-blog-next aria-label="Ver más notas" disabled>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <a href="/blog" class="blog-preview__all">Ver todas las notas <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
 
-            <div class="blog-card__content">
-              <span>{post.data.category}</span>
+    {
+      posts.length > 0 && (
+        <div class="blog-carousel" data-blog-carousel>
+          <div
+            class="blog-carousel__viewport"
+            data-blog-viewport
+            tabindex="0"
+            role="region"
+            aria-roledescription="carrusel"
+            aria-label="Notas técnicas destacadas"
+          >
+            <div class="blog-carousel__track" data-blog-track>
+              {posts.map((post) => (
+                <article class="blog-carousel__card">
+                  <a href={`/blog/${post.id}`} class="blog-carousel__media" aria-label={post.data.title}>
+                    <img
+                      src={post.data.image}
+                      alt={post.data.imageAlt ?? ""}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
 
-              <h3>
-                <a href={`/blog/${post.id}`}>{post.data.title}</a>
-              </h3>
-
-              <p>{post.data.description}</p>
-
-              <a href={`/blog/${post.id}`} class="blog-card__link">
-                Leer nota
-              </a>
+                  <div class="blog-carousel__content">
+                    <p class="blog-carousel__category">{post.data.category}</p>
+                    <h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
+                    <p>{post.data.description}</p>
+                    <a href={`/blog/${post.id}`} class="blog-carousel__link">
+                      Leer nota <span aria-hidden="true">→</span>
+                    </a>
+                  </div>
+                </article>
+              ))}
             </div>
-          </article>
-        ))
-      }
-    </div>
-
-    <div class="blog-preview__cta">
-      <a href="/blog">
-        Ver todas las notas
-      </a>
-    </div>
+          </div>
+        </div>
+      )
+    }
   </Container>
 </section>
+
+<script>
+  document.querySelectorAll("[data-blog-carousel]").forEach((carousel) => {
+    const viewport = carousel.querySelector("[data-blog-viewport]");
+    const track = carousel.querySelector("[data-blog-track]");
+    const previous = document.querySelector("[data-blog-previous]");
+    const next = document.querySelector("[data-blog-next]");
+
+    if (!(viewport instanceof HTMLElement) || !(track instanceof HTMLElement) || !(previous instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const step = () => {
+      const firstCard = track.firstElementChild;
+      const gap = Number.parseFloat(getComputedStyle(track).gap) || 0;
+
+      return firstCard instanceof HTMLElement ? firstCard.getBoundingClientRect().width + gap : viewport.clientWidth;
+    };
+
+    const updateNavigation = () => {
+      const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+      const firstCard = track.firstElementChild;
+      const lastCard = track.lastElementChild;
+      const viewportBounds = viewport.getBoundingClientRect();
+      const atStart = firstCard instanceof HTMLElement
+        ? firstCard.getBoundingClientRect().left >= viewportBounds.left - 1
+        : viewport.scrollLeft <= 1;
+      const atEnd = lastCard instanceof HTMLElement
+        ? lastCard.getBoundingClientRect().right <= viewportBounds.right + 1
+        : viewport.scrollLeft >= maxScroll - 1;
+      const staticCarousel = maxScroll <= 1;
+
+      previous.disabled = staticCarousel || atStart;
+      next.disabled = staticCarousel || atEnd;
+      carousel.classList.toggle("is-static", staticCarousel);
+    };
+
+    const move = (direction) => {
+      viewport.scrollBy({ left: direction * step(), behavior: "smooth" });
+    };
+
+    previous.addEventListener("click", () => move(-1));
+    next.addEventListener("click", () => move(1));
+    viewport.addEventListener("scroll", updateNavigation, { passive: true });
+    viewport.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        move(-1);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        move(1);
+      }
+    });
+
+    new ResizeObserver(updateNavigation).observe(viewport);
+    updateNavigation();
+  });
+</script>

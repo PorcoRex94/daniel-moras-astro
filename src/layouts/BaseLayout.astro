@@ -7,9 +7,16 @@ import "../styles/blog.css";
 import "../styles/rubros.css";
 import "../styles/equipos.css";
 import "../styles/insumos.css";
+import "../styles/home-v2.css";
+import "../styles/home-v3.css";
+import "../styles/home-v4.css";
+import "../styles/rubro-pilot.css";
+import "../styles/footer.css";
 
 import Header from "../components/layout/Header.astro";
 import FloatingChat from "../components/layout/FloatingChat.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+import { getSiteUrl } from "../lib/site-url.js";
 
 const {
   title = "Daniel Moras | Soluciones de impresión industrial",
@@ -19,7 +26,7 @@ const {
   schema = [],
 } = Astro.props;
 
-const siteUrl = Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(Astro.site);
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const imageUrl = new URL(image, siteUrl).toString();
 
@@ -109,6 +116,7 @@ const structuredData = [...baseSchema, ...extraSchema].filter(Boolean);
   <body id="top">
     <Header />
     <slot />
+    <SiteFooter />
     <FloatingChat />
   </body>
 </html>

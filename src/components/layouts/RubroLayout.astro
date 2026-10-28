@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import RubroEquipmentGroups from "../components/sections/RubroEquipmentGroups.astro";
+import { getSiteUrl } from "../../lib/site-url.js";
 
 import { rubros } from "../data/rubros";
 import { equipos } from "../data/equipos";
@@ -13,8 +14,7 @@ import { equiposEditorial } from "../data/equiposEditorial";
 
 const { rubro } = Astro.props;
 
-const siteUrl =
-  Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(Astro.site);
 
 const pagePath = Astro.url.pathname.replace(/\/$/, "");
 const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();

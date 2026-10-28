@@ -2466,3 +2466,29 @@
     margin-top: 0.45rem;
   }
 }
+
+/* La acción flotante sigue disponible, sin cubrir filtros ni CTAs de equipos. */
+@media (max-width: 620px) {
+  .equipo-page--compact .equipo-product-hero__actions {
+    padding-right: 4rem;
+  }
+
+  body:has(.equipos-page, .equipo-page--compact)
+    .floating-actions:not(.floating-actions--open)
+    .floating-actions__chat {
+    display: grid;
+    width: 3.05rem;
+    min-width: 3.05rem;
+    max-width: 3.05rem;
+    height: 3.05rem;
+    padding: 0;
+    place-items: center;
+    justify-self: center;
+  }
+
+  body:has(.equipos-page, .equipo-page--compact)
+    .floating-actions:not(.floating-actions--open)
+    .floating-actions__text {
+    display: none;
+  }
+}

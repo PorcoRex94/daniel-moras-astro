@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import RubroEquipmentGroups from "../components/sections/RubroEquipmentGroups.astro";
+import { getSiteUrl } from "../lib/site-url.js";
 
 import { rubros } from "../data/rubros";
 import { equipos } from "../data/equipos";
@@ -13,8 +14,7 @@ import { equiposEditorial } from "../data/equiposEditorial";
 
 const { rubro } = Astro.props;
 
-const siteUrl =
-  Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(Astro.site);
 
 const pagePath = Astro.url.pathname.replace(/\/$/, "");
 const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
@@ -36,6 +36,34 @@ const rubroKeyByPath = {
 };
 
 const currentRubroKey = rubroKeyByPath[pagePath];
+const isVisualCommunication = currentRubroKey === "comunicacionVisual";
+
+const technologyIntroductionByRubro = {
+  packaging:
+    "Explorá las familias disponibles para Packaging. La elección final depende del material, la impresión, el corte, el hendido y la terminación que necesita cada pieza.",
+  textil:
+    "Explorá las familias disponibles para Industria textil. La elección final depende del tipo de tela, la técnica de impresión, el formato de trabajo y el finishing necesario.",
+  editorial:
+    "Explorá las familias disponibles para Editorial. La elección final depende del volumen, la repetibilidad, la calidad esperada y la integración entre impresión y terminación.",
+  etiquetas:
+    "Explorá las familias disponibles para Etiquetas. La elección final depende del sustrato, el adhesivo, la tirada, el corte y la terminación requeridos.",
+  comunicacionVisual:
+    "Explorá las familias disponibles para Comunicación Visual. La elección final depende del material, el volumen, el ancho, el acabado y el proceso que necesitás resolver.",
+};
+
+const technologyIntroduction =
+  technologyIntroductionByRubro[currentRubroKey] ??
+  "La recomendación depende del material, el flujo de trabajo y el tipo de producción que se busca sostener.";
+
+const getTechnologyCategory = (title) => {
+  if (/tinta|insumo|parte/i.test(title)) return "Insumos y soporte";
+
+  if (/corte|finishing|terminación|automatización/i.test(title)) {
+    return "Proceso complementario";
+  }
+
+  return "Tecnología de impresión";
+};
 
 const equiposDelRubro = currentRubroKey
   ? equipos.filter((equipo) => equipo.rubros.includes(currentRubroKey))
@@ -197,7 +225,7 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
   image={rubro.image}
   schema={[rubroSchema, breadcrumbSchema]}
 >
-  <main class="rubro-page">
+  <main class="rubro-page rubro-page--pilot">
     <section class="rubro-hero" style={heroStyle}>
       <div class="rubro-hero__inner">
         <div class="rubro-hero__content">
@@ -219,9 +247,22 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
             {rubro.description}
           </p>
 
-          <a href="#consulta-rubro" class="rubro-hero__cta">
-            {rubro.cta}
-          </a>
+          <div class="rubro-hero__actions">
+            <a
+              href={isVisualCommunication ? "#equipos" : "#consulta-rubro"}
+              class="rubro-hero__cta"
+            >
+              {isVisualCommunication ? "Ver equipos" : rubro.cta}
+            </a>
+
+            {
+              isVisualCommunication && (
+                <a href="/#contacto" class="rubro-hero__cta rubro-hero__cta--secondary">
+                  Hacer una consulta
+                </a>
+              )
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -229,7 +270,7 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
     <section class="rubro-intro">
       <div class="rubro-section__inner rubro-intro__inner">
         <div class="rubro-intro__heading">
-          <p class="rubro-eyebrow">Enfoque del rubro</p>
+          <p class="rubro-intro__identifier">{rubro.eyebrow}</p>
           <h2>{rubro.introTitle}</h2>
         </div>
 
@@ -277,22 +318,29 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
 
     <section class="rubro-technologies">
       <div class="rubro-section__inner">
-        <header class="rubro-section__heading">
-          <p class="rubro-eyebrow">Tecnologías</p>
+        <header class="rubro-section__heading rubro-technologies__heading">
+          <p class="rubro-eyebrow">Equipos y soluciones</p>
 
-          <h2>Tecnologías que pueden evaluarse.</h2>
+          <h2>Tecnología organizada según cada etapa de producción.</h2>
 
-          <p>
-            La recomendación depende del material, el flujo de trabajo y el tipo
-            de producción que se busca sostener.
-          </p>
+          <p>{technologyIntroduction}</p>
         </header>
 
         <div class="rubro-technologies__grid">
           {
-            rubro.technologies.map((technology) => (
+            rubro.technologies.map((technology, index) => (
               <article class="rubro-technology-card">
-                <h3>{technology.title}</h3>
+                {
+                  <span class="rubro-technology-card__number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                }
+
+                <div class="rubro-technology-card__title">
+                  <span>{getTechnologyCategory(technology.title)}</span>
+                  <h3>{technology.title}</h3>
+                </div>
+
                 <p>{technology.text}</p>
               </article>
             ))
@@ -307,30 +355,35 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
           families={familiasRubros.textil}
           equipment={equiposTextil}
           rubroLabel="Industria textil"
+          hideHeading={true}
         />
       ) : currentRubroKey === "packaging" ? (
         <RubroEquipmentGroups
           families={familiasRubros.packaging}
           equipment={equiposPackaging}
           rubroLabel="Packaging"
+          hideHeading={true}
         />
       ) : currentRubroKey === "comunicacionVisual" ? (
         <RubroEquipmentGroups
           families={familiasRubros.comunicacionVisual}
           equipment={equiposComunicacionVisual}
           rubroLabel="Comunicación visual"
+          hideHeading={true}
         />
       ) : currentRubroKey === "etiquetas" ? (
         <RubroEquipmentGroups
           families={familiasRubros.etiquetas}
           equipment={equiposEtiquetas}
           rubroLabel="Etiquetas"
+          hideHeading={true}
         />
       ) : currentRubroKey === "editorial" ? (
         <RubroEquipmentGroups
           families={familiasRubros.editorial}
           equipment={equiposEditorial}
           rubroLabel="Editorial"
+          hideHeading={true}
         />
       ) : (
         equiposDelRubro.length > 0 && (
@@ -500,22 +553,5 @@ const heroStyle = `--rubro-hero-image: url("${rubro.image}")`;
         </a>
       </div>
     </section>
-    <footer class="site-footer-industrial">
-      <div class="site-footer-industrial__inner">
-        <a href="/" class="site-footer-industrial__brand" aria-label="Daniel Moras - Inicio">
-          <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" />
-        </a>
-
-        <nav aria-label="Navegación de cierre">
-          <a href="/">Inicio</a>
-          <a href="/#rubros">Rubros</a>
-          <a href="/blog">Blog</a>
-          <a href="/#contacto">Contacto</a>
-        </nav>
-            <p>
-              Developed by <strong>Ambraco</strong>.
-            </p>
-      </div>
-    </footer>
   </main>
 </BaseLayout>

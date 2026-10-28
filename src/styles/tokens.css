@@ -1,20 +1,22 @@
 :root {
   /* Brand */
-  --color-brand-900: #063b34;
-  --color-brand-800: #0b4f45;
-  --color-brand-700: #0f6b5d;
-  --color-brand-600: #16816f;
-  --color-brand-500: #1c9a84;
+  --color-brand-900: #082b28;
+  --color-brand-800: #0c4039;
+  --color-brand-700: #13584e;
+  --color-brand-600: #1b7667;
+  --color-brand-500: #27907d;
 
-  --color-accent: #f5c542;
-  --color-accent-strong: #f0a900;
+  --color-accent: #d9b35d;
+  --color-accent-strong: #bd9138;
 
   /* Neutrals */
-  --color-ink: #10201d;
-  --color-muted: #5d6b67;
-  --color-soft: #f4f7f6;
+  --color-ink: #14211f;
+  --color-muted: #596560;
+  --color-soft: #f1f4f1;
   --color-white: #ffffff;
-  --color-border: #dbe5e2;
+  --color-border: #d8e0da;
+  --color-surface-dark: #102a27;
+  --color-surface-ink: #071a18;
 
   /* Rubro accents */
   --accent-packaging: #d9792b;
@@ -25,11 +27,11 @@
   --accent-insumos: #79bd3f;
 
   /* Typography */
-  --font-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-base: "Aptos", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Aptos Display", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
 
   /* Layout */
-  --container: 1180px;
+  --container: 1480px;
   --section-padding: clamp(3rem, 7vw, 6rem);
   --radius-sm: 0.5rem;
   --radius-md: 1rem;
@@ -37,9 +39,9 @@
   --radius-xl: 2rem;
 
   /* Shadows */
-  --shadow-soft: 0 18px 45px rgba(6, 59, 52, 0.12);
-  --shadow-card: 0 12px 30px rgba(16, 32, 29, 0.1);
+  --shadow-soft: 0 20px 52px rgba(8, 43, 40, 0.1);
+  --shadow-card: 0 16px 36px rgba(8, 43, 40, 0.12);
 
   /* Motion */
-  --transition: 180ms ease;
+  --transition: 180ms cubic-bezier(0.2, 0.65, 0.3, 1);
 }

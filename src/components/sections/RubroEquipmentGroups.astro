@@ -4,6 +4,7 @@ const {
   equipment = [],
   rubroLabel = "Industria textil",
   useWideCards = false,
+  hideHeading = false,
 } = Astro.props;
 
 const brandLogos = {
@@ -52,26 +53,33 @@ const shouldUseWideCards =
 ---
 
 <section
+  id="equipos"
   class:list={[
     "rubro-equipment-groups",
     shouldUseWideCards && "rubro-equipment-groups--wide",
+    hideHeading && "rubro-equipment-groups--without-title",
   ]}
-  aria-labelledby="equipment-groups-title"
+  aria-labelledby={hideHeading ? undefined : "equipment-groups-title"}
+  aria-label={hideHeading ? `Equipos y soluciones para ${rubroLabel}` : undefined}
 >
   <div class="rubro-section__inner">
-    <header class="rubro-section__heading rubro-equipment-groups__heading">
-      <p class="rubro-eyebrow">Equipos y soluciones</p>
+    {
+      !hideHeading && (
+        <header class="rubro-section__heading rubro-equipment-groups__heading">
+          <p class="rubro-eyebrow">Equipos y soluciones</p>
 
-      <h2 id="equipment-groups-title">
-        Tecnología organizada según cada etapa de producción.
-      </h2>
+          <h2 id="equipment-groups-title">
+            Tecnología organizada según cada etapa de producción.
+          </h2>
 
-      <p>
-        Explorá las familias disponibles para {rubroLabel}. La elección final
-        depende del material, el volumen, el ancho, el acabado y el proceso que
-        necesitás resolver.
-      </p>
-    </header>
+          <p>
+            Explorá las familias disponibles para {rubroLabel}. La elección final
+            depende del material, el volumen, el ancho, el acabado y el proceso que
+            necesitás resolver.
+          </p>
+        </header>
+      )
+    }
 
     {
       featuredEquipment.length > 0 && (

@@ -1,18 +1,22 @@
 ---
-const navItems = [
-  { label: "Inicio", href: "/" },
-  { label: "Insumos", href: "/insumos" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contacto", href: "#contacto" },
-];
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const rubros = [
-  { label: "Packaging", href: "/rubros/packaging" },
-  { label: "Industria textil", href: "/rubros/textil" },
+  { label: "Comunicación visual", href: "/rubros/comunicacion-visual" },
   { label: "Editorial", href: "/rubros/editorial" },
   { label: "Etiquetas", href: "/rubros/etiquetas" },
-  { label: "Comunicación visual", href: "/rubros/comunicacion-visual" },
+  { label: "Industria textil", href: "/rubros/textil" },
+  { label: "Packaging", href: "/rubros/packaging" },
+  { label: "Tintas e insumos", href: "/insumos" },
 ];
+
+const navItems = [
+  { label: "Equipos", href: "/equipos", active: pathname.startsWith("/equipos") },
+  { label: "Insumos", href: "/insumos", active: pathname.startsWith("/insumos") },
+  { label: "Blog", href: "/blog", active: pathname.startsWith("/blog") },
+];
+
+const rubrosActive = pathname.startsWith("/rubros");
 ---
 
 <header class="site-header">
@@ -22,64 +26,70 @@ const rubros = [
         src="/images/logo-daniel-moras.png"
         alt="Daniel Moras"
         class="site-header__logo"
+        width="512"
+        height="512"
       />
     </a>
 
     <nav class="site-header__nav" aria-label="Navegación principal">
-      <a href="/">Inicio</a>
+      <a href="/" aria-current={pathname === "/" ? "page" : undefined}>Inicio</a>
+      <a href="/equipos" aria-current={navItems[0].active ? "page" : undefined}>Equipos</a>
 
-      <div class="site-header__dropdown">
-        <a href="#rubros" class="site-header__dropdown-trigger">
+      <details class="site-header__dropdown">
+        <summary aria-current={rubrosActive ? "page" : undefined}>
           Rubros
-          <span aria-hidden="true">▾</span>
-        </a>
+          <span aria-hidden="true">⌄</span>
+        </summary>
 
         <div class="site-header__dropdown-menu">
+          <p>Soluciones por industria</p>
+
           {
             rubros.map((rubro) => (
-              <a href={rubro.href}>
-                {rubro.label}
-              </a>
+              <a href={rubro.href}>{rubro.label}</a>
             ))
           }
         </div>
-      </div>
+      </details>
 
       {
         navItems.slice(1).map((item) => (
-          <a href={item.href}>{item.label}</a>
+          <a href={item.href} aria-current={item.active ? "page" : undefined}>
+            {item.label}
+          </a>
         ))
       }
     </nav>
 
-    <a href="#contacto" class="site-header__cta">
-      Consultar
+    <a href="/#contacto" class="site-header__cta">
+      Hablar con un especialista
+      <span aria-hidden="true">↗</span>
     </a>
 
     <details class="site-header__mobile">
-      <summary>
+      <summary aria-label="Abrir menú de navegación">
         <span>Menú</span>
+        <span aria-hidden="true">⌄</span>
       </summary>
 
-      <div class="site-header__mobile-panel">
-        <a href="/">Inicio</a>
+      <nav class="site-header__mobile-panel" aria-label="Navegación móvil">
+        <a href="/" aria-current={pathname === "/" ? "page" : undefined}>Inicio</a>
+        <a href="/equipos" aria-current={navItems[0].active ? "page" : undefined}>Equipos</a>
 
         <div class="site-header__mobile-group">
           <strong>Rubros</strong>
 
           {
             rubros.map((rubro) => (
-              <a href={rubro.href}>
-                {rubro.label}
-              </a>
+              <a href={rubro.href}>{rubro.label}</a>
             ))
           }
         </div>
 
-        <a href="/insumos">Insumos</a>
-        <a href="/blog">Blog</a>
-        <a href="#contacto">Contacto</a>
-      </div>
+        <a href="/insumos" aria-current={navItems[1].active ? "page" : undefined}>Insumos</a>
+        <a href="/blog" aria-current={navItems[2].active ? "page" : undefined}>Blog</a>
+        <a class="site-header__mobile-cta" href="/#contacto">Contacto</a>
+      </nav>
     </details>
   </div>
 </header>
