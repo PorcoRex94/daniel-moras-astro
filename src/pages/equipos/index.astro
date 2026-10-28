@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { equipos } from "../../data/equipos";
+import "../../styles/equipos-catalog.css";
+import { equiposCatalogo, getDestinoCatalogo } from "../../data/equiposCatalogo";
 import { rubrosEquipos } from "../../data/categoriasEquipos";
 
 const title = "Equipos de impresión, corte y finishing | Daniel Moras";
@@ -12,7 +13,7 @@ const rubroOptions = Object.values(rubrosEquipos);
 
 const categoryOptions = [
   ...new Map(
-    equipos.map((equipo) => [
+    equiposCatalogo.map((equipo) => [
       equipo.categoryId,
       {
         id: equipo.categoryId,
@@ -22,12 +23,12 @@ const categoryOptions = [
   ).values(),
 ].sort((a, b) => a.label.localeCompare(b.label, "es"));
 
-const brandOptions = [...new Set(equipos.map((equipo) => equipo.brand))].sort(
+const brandOptions = [...new Set(equiposCatalogo.map((equipo) => equipo.brand))].sort(
   (a, b) => a.localeCompare(b, "es"),
 );
 
 const technologyOptions = [
-  ...new Set(equipos.map((equipo) => equipo.technology)),
+  ...new Set(equiposCatalogo.map((equipo) => equipo.technology)),
 ].sort((a, b) => a.localeCompare(b, "es"));
 ---
 
@@ -62,9 +63,9 @@ const technologyOptions = [
             </div>
 
             <p class="equipos-filters__count" aria-live="polite">
-              <strong data-results-count>{equipos.length}</strong>
+              <strong data-results-count>{equiposCatalogo.length}</strong>
               <span data-results-label>
-                {equipos.length === 1 ? "equipo encontrado" : "equipos encontrados"}
+                {equiposCatalogo.length === 1 ? "equipo encontrado" : "equipos encontrados"}
               </span>
             </p>
           </div>
@@ -163,21 +164,24 @@ const technologyOptions = [
 
         <div class="equipos-grid" data-equipment-grid>
           {
-            equipos.map((equipo) => (
-              <article
-                class="equipo-card"
-                data-equipment-card
-                data-rubros={equipo.rubros.join(",")}
-                data-category={equipo.categoryId}
-                data-brand={equipo.brand}
-                data-technology={equipo.technology}
-                data-video={equipo.video?.url ? "true" : "false"}
-              >
-                <a
-                  href={`/equipos/${equipo.id}`}
-                  class="equipo-card__link"
-                  aria-label={`Ver ${equipo.name}`}
+            equiposCatalogo.map((equipo) => {
+              const destination = getDestinoCatalogo(equipo);
+
+              return (
+                <article
+                  class="equipo-card"
+                  data-equipment-card
+                  data-rubros={equipo.rubros.join(",")}
+                  data-category={equipo.categoryId}
+                  data-brand={equipo.brand}
+                  data-technology={equipo.technology}
+                  data-video={equipo.hasVideo ? "true" : "false"}
                 >
+                  <a
+                    href={destination.href}
+                    class="equipo-card__link"
+                    aria-label={destination.ariaLabel}
+                  >
                   <div class="equipo-card__image">
                     <img
                       src={equipo.image}
@@ -186,17 +190,6 @@ const technologyOptions = [
                       decoding="async"
                     />
 
-                    {
-                      equipo.video?.url && (
-                        <span class="equipo-card__video">
-                          <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M8.5 6.6v10.8L17 12 8.5 6.6Z" />
-                          </svg>
-
-                          Video
-                        </span>
-                      )
-                    }
                   </div>
 
                   <div class="equipo-card__content">
@@ -228,13 +221,14 @@ const technologyOptions = [
                     </div>
 
                     <span class="equipo-card__action">
-                      Ver equipo
+                      {destination.action}
                       <span aria-hidden="true">→</span>
                     </span>
                   </div>
-                </a>
-              </article>
-            ))
+                  </a>
+                </article>
+              );
+            })
           }
         </div>
 
@@ -321,7 +315,54 @@ const technologyOptions = [
     return field instanceof HTMLInputElement && field.checked;
   };
 
-  const updateCatalog = () => {
+  const readFiltersFromUrl = () => {
+    if (!(filtersForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    ["rubro", "category", "brand", "technology"].forEach((name) => {
+      const field = filtersForm.elements.namedItem(name);
+      const value = params.get(name) ?? "";
+
+      if (field instanceof HTMLSelectElement) {
+        field.value = value;
+      }
+    });
+
+    const videoField = filtersForm.elements.namedItem("video");
+
+    if (videoField instanceof HTMLInputElement) {
+      videoField.checked = params.get("video") === "1";
+    }
+  };
+
+  const syncFiltersToUrl = () => {
+    if (!(filtersForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams();
+
+    ["rubro", "category", "brand", "technology"].forEach((name) => {
+      const value = getFieldValue(name);
+
+      if (value) {
+        params.set(name, value);
+      }
+    });
+
+    if (isVideoEnabled()) {
+      params.set("video", "1");
+    }
+
+    url.search = params.toString();
+    window.history.replaceState({}, "", url);
+  };
+
+  const updateCatalog = ({ syncUrl = false } = {}) => {
     const selectedRubro = getFieldValue("rubro");
     const selectedCategory = getFieldValue("category");
     const selectedBrand = getFieldValue("brand");
@@ -398,6 +439,10 @@ const technologyOptions = [
     if (activeFilter instanceof HTMLElement) {
       activeFilter.hidden = !filtersAreActive;
     }
+
+    if (syncUrl) {
+      syncFiltersToUrl();
+    }
   };
 
   const resetCatalog = () => {
@@ -406,14 +451,20 @@ const technologyOptions = [
     }
 
     filtersForm.reset();
-    updateCatalog();
+    updateCatalog({ syncUrl: true });
   };
 
-  filtersForm?.addEventListener("change", updateCatalog);
+  filtersForm?.addEventListener("change", () => updateCatalog({ syncUrl: true }));
 
   resetButtons.forEach((button) => {
     button?.addEventListener("click", resetCatalog);
   });
 
+  readFiltersFromUrl();
   updateCatalog();
+
+  window.addEventListener("popstate", () => {
+    readFiltersFromUrl();
+    updateCatalog();
+  });
 </script>

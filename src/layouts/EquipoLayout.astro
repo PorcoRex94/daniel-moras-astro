@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import { getEquiposRelacionados } from "../data/equiposIndex";
+import { getSiteUrl } from "../lib/site-url.js";
 
 const { equipo } = Astro.props;
 
-const siteUrl =
-  Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(Astro.site);
 
 const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
@@ -375,23 +375,5 @@ const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
       </div>
     </section>
 
-    <footer class="equipo-footer">
-      <div class="equipo-footer__inner">
-        <a href="/" class="equipo-footer__brand" aria-label="Daniel Moras - Inicio">
-          <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" />
-        </a>
-
-        <nav aria-label="Navegación de cierre">
-          <a href="/">Inicio</a>
-          <a href="/#rubros">Rubros</a>
-          <a href="/blog">Blog</a>
-          <a href="/#contacto">Contacto</a>
-        </nav>
-
-        <p>
-          Developed by <strong>Ambraco</strong>.
-        </p>
-      </div>
-    </footer>
   </main>
 </BaseLayout>

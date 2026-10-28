@@ -1,16 +1,32 @@
 ---
 import EquipoLayout from "../../layouts/EquipoLayout.astro";
-import { equiposPublicados, getEquipoById } from "../../data/equiposIndex";
+import {
+  equiposLegacyRedirects,
+  equiposPublicados,
+  getEquipoById,
+} from "../../data/equiposCatalogo";
 
 export function getStaticPaths() {
-  return equiposPublicados.map((equipo) => ({
-    params: {
-      id: equipo.id,
-    },
-  }));
+  return [
+    ...equiposPublicados.map((equipo) => ({
+      params: {
+        id: equipo.id,
+      },
+    })),
+    ...Object.entries(equiposLegacyRedirects).map(([id, redirectTo]) => ({
+      params: { id },
+      props: { redirectTo },
+    })),
+  ];
 }
 
 const { id } = Astro.params;
+const { redirectTo } = Astro.props;
+
+if (redirectTo) {
+  return Astro.redirect(redirectTo);
+}
+
 const equipo = getEquipoById(id);
 
 if (!equipo || !equipo.pageReady) {
