@@ -1,0 +1,324 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const rubros = [
+  {
+    number: "01",
+    title: "Comunicación visual",
+    description: "Gráfica UV, cartelería, rígidos y aplicaciones visuales de alto impacto.",
+    href: "/rubros/comunicacion-visual",
+    image: "/images/equipos/comunicacion-visual/allwin-hb1800-uv-impresora-hibrida.webp",
+    imageAlt: "Impresora híbrida UV Allwin para comunicación visual",
+    variant: "graphite",
+  },
+  {
+    number: "02",
+    title: "Editorial",
+    description: "Producción Inkjet para libros, tiradas flexibles e impresión bajo demanda.",
+    href: "/rubros/editorial",
+    image: "/images/equipos/editorial/flora-swift440.webp",
+    imageAlt: "Equipo Flora para producción editorial",
+    variant: "paper",
+  },
+  {
+    number: "03",
+    title: "Etiquetas",
+    description: "Alta definición, datos variables y terminación para series cortas y flexibles.",
+    href: "/rubros/etiquetas",
+    image: "/images/equipos/etiquetas/flora-j350gt-flexo-inkjet-etiquetas.webp",
+    imageAlt: "Equipo Flora para impresión de etiquetas",
+    variant: "copper",
+  },
+  {
+    number: "04",
+    title: "Industria textil",
+    description: "Sublimación, DTF e impresión directa para prendas, telas y producción por rollo.",
+    href: "/rubros/textil",
+    image: "/images/equipos/textil/allwin-dtf6002.webp",
+    imageAlt: "Equipo Allwin DTF para producción textil",
+    variant: "ink",
+  },
+  {
+    number: "05",
+    title: "Packaging",
+    description: "Tecnología digital para envases, displays, cartón y materiales rígidos.",
+    href: "/rubros/packaging",
+    image: "/images/equipos/packaging/c25h-pro-flora-impresora-packaging.webp",
+    imageAlt: "Impresora Flora para aplicaciones de packaging",
+    variant: "sand",
+  },
+  {
+    number: "06",
+    title: "Tintas e insumos",
+    description: "Tintas, partes e insumos para sostener calidad, cuidado y continuidad operativa.",
+    href: "/insumos",
+    image: "/images/tinsumos/tintas-allwin-uv-epsh.webp",
+    imageAlt: "Tintas Allwin para impresión digital",
+    variant: "green",
+  },
+];
+
+const contactLinks = [
+  {
+    label: "WhatsApp",
+    detail: "Consultar por WhatsApp",
+    href: "https://wa.me/5491166722505",
+  },
+  {
+    label: "Correo",
+    detail: "daniel@danielmoras.com.ar",
+    href: "mailto:daniel@danielmoras.com.ar",
+  },
+];
+---
+
+<a class="dr-skip-link" href="#dr-main">Ir al contenido de la propuesta</a>
+
+<header class="dr-topbar">
+  <div class="dr-shell dr-topbar__inner">
+    <a class="dr-topbar__brand" href="/" aria-label="Daniel Moras - inicio del sitio">
+      <img src="/images/logo-daniel-moras.png" alt="Daniel Moras" width="512" height="512" />
+      <span>Dirección de arte · propuesta en revisión</span>
+    </a>
+
+    <nav class="dr-topbar__nav" aria-label="Secciones de la propuesta">
+      <a href="#historia">Historia</a>
+      <a href="#rubros">Rubros</a>
+      <a href="#notas">Notas</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="dr-main">
+  <section class="dr-story" id="historia" aria-labelledby="dr-story-title">
+    <div class="dr-shell">
+      <header class="dr-section-heading dr-story__heading">
+        <div>
+          <p class="dr-kicker">01 · Historia y criterio técnico</p>
+        <h1 id="dr-story-title">Tecnología para producir mejor.</h1>
+        </div>
+
+        <div class="dr-section-heading__summary">
+          <p>
+            Daniel Moras integra experiencia gráfica, tecnología Inkjet y recursos
+            técnicos de ISD S.A. para evaluar cada proceso según material,
+            aplicación, volumen y continuidad operativa.
+          </p>
+          <a class="dr-text-link" href="#contacto">Hablar sobre un proyecto <span aria-hidden="true">↗</span></a>
+        </div>
+      </header>
+
+      <div class="dr-story__main">
+        <figure class="dr-story__image">
+          <img
+            src="/images/og-daniel-moras.webp"
+            alt="Stand de Integración de Sistemas Digitales y Daniel Moras"
+            width="1920"
+            height="1440"
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption>Integración de Sistemas Digitales · tecnología y representación de marcas.</figcaption>
+        </figure>
+
+        <div class="dr-timeline" aria-label="Trayectoria institucional">
+          <article class="dr-timeline__item">
+            <p>1988</p>
+            <div>
+              <h2>Una base en el sector gráfico</h2>
+              <p>Los comienzos se vinculan con MORAS &amp; Cia. y una mirada cercana sobre las necesidades reales de producción.</p>
+            </div>
+          </article>
+
+          <article class="dr-timeline__item">
+            <p>1994</p>
+            <div>
+              <h2>Experiencia Inkjet aplicada</h2>
+              <p>Trabajo con tecnología eco-solvente, solvente, UV y base agua para resolver aplicaciones y materiales distintos.</p>
+            </div>
+          </article>
+
+          <article class="dr-timeline__item">
+            <p>ISD</p>
+            <div>
+              <h2>Experiencia integrada</h2>
+              <p>La integración con ISD S.A. suma recursos técnicos especializados, atención directa y acompañamiento de campo.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="dr-story__details">
+        <article class="dr-story-note dr-story-note--accent">
+          <p class="dr-note-label">Hito documentado</p>
+          <h2>GrandJet de Scitex Vision</h2>
+          <p>El contenido institucional registra la instalación del primer equipo Inkjet GrandJet de Scitex Vision en Argentina y América Latina.</p>
+        </article>
+
+        <article class="dr-story-note">
+          <p class="dr-note-label">Tecnologías y alcance</p>
+          <h2>Equipos, finishing e insumos</h2>
+          <p>Equipos Inkjet Mimaki, Allwin, Apex, Flora y HD Digital; finishing, mesas Iecho y Saga, sistemas láser, tintas, partes e insumos.</p>
+        </article>
+
+        <article class="dr-story-note">
+          <p class="dr-note-label">Acompañamiento</p>
+          <h2>Producción con continuidad</h2>
+          <p>Stock de partes y tintas, contacto técnico e ingenieros de campo de ISD S.A. para orientar cada decisión de producción.</p>
+        </article>
+      </div>
+
+      <!--
+        Validar antes de una publicación: la referencia temporal "25 años" del
+        GrandJet y la promesa de soporte en "24 hs" del contenido original.
+      -->
+    </div>
+  </section>
+
+  <section class="dr-sectors" id="rubros" aria-labelledby="dr-sectors-title">
+    <div class="dr-shell">
+      <header class="dr-section-heading dr-sectors__heading">
+        <div>
+          <p class="dr-kicker">02 · Soluciones por industria</p>
+        <h2 id="dr-sectors-title">Seis áreas para producir mejor.</h2>
+        </div>
+        <p class="dr-section-heading__summary">
+          Tecnología, aplicación, materiales y escala cambian en cada rubro. Esta propuesta organiza el recorrido sin convertirlo en un catálogo.
+        </p>
+      </header>
+
+      <div class="dr-sector-grid">
+        {
+          rubros.map((rubro) => (
+            <article class:list={["dr-sector-card", `dr-sector-card--${rubro.variant}`]}>
+              <a href={rubro.href} class="dr-sector-card__link">
+                <div class="dr-sector-card__visual">
+                  <span class="dr-sector-card__number" aria-hidden="true">{rubro.number}</span>
+                  <img src={rubro.image} alt={rubro.imageAlt} loading="lazy" decoding="async" />
+                </div>
+                <div class="dr-sector-card__copy">
+                  <h3>{rubro.title}</h3>
+                  <p>{rubro.description}</p>
+                  <span class="dr-sector-card__action">Explorar soluciones <span aria-hidden="true">↗</span></span>
+                </div>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="dr-journal" id="notas" aria-labelledby="dr-journal-title">
+    <div class="dr-shell">
+      <header class="dr-section-heading dr-journal__heading">
+        <div>
+          <p class="dr-kicker">03 · Notas técnicas</p>
+        <h2 id="dr-journal-title">Criterios para sostener la operación.</h2>
+        </div>
+        <a class="dr-text-link" href="/blog">Ver todas las notas <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <div class="dr-journal__grid">
+        {
+          posts[0] && (
+            <article class="dr-featured-article">
+              <a class="dr-featured-article__media" href={`/blog/${posts[0].id}`} aria-label={posts[0].data.title}>
+                <img src={posts[0].data.image} alt={posts[0].data.imageAlt ?? ""} loading="lazy" decoding="async" />
+              </a>
+              <div class="dr-featured-article__copy">
+                <p class="dr-note-label">{posts[0].data.category}</p>
+                <h3><a href={`/blog/${posts[0].id}`}>{posts[0].data.title}</a></h3>
+                <p>{posts[0].data.description}</p>
+                <a class="dr-text-link" href={`/blog/${posts[0].id}`}>Leer artículo <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          )
+        }
+
+        <div class="dr-secondary-articles">
+          {
+            posts.slice(1).map((post) => (
+              <article class="dr-secondary-article">
+                <a class="dr-secondary-article__media" href={`/blog/${post.id}`} aria-label={post.data.title}>
+                  <img src={post.data.image} alt={post.data.imageAlt ?? ""} loading="lazy" decoding="async" />
+                </a>
+                <div>
+                  <p class="dr-note-label">{post.data.category}</p>
+                  <h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
+                  <p>{post.data.description}</p>
+                  <a class="dr-text-link" href={`/blog/${post.id}`}>Leer artículo <span aria-hidden="true">→</span></a>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dr-contact" id="contacto" aria-labelledby="dr-contact-title">
+    <div class="dr-shell dr-contact__grid">
+      <div class="dr-contact__intro">
+        <p class="dr-kicker">04 · Asesoramiento comercial</p>
+        <h2 id="dr-contact-title">Contanos qué necesitás producir.</h2>
+        <p>
+          Una consulta puede empezar por el material, una aplicación, un volumen o un equipo. Con esa información es posible orientar mejor la tecnología y los insumos adecuados.
+        </p>
+
+        <div class="dr-contact-links">
+          {
+            contactLinks.map((link) => (
+              <a href={link.href}>
+                <span>{link.label}</span>
+                <strong>{link.detail}</strong>
+                <i aria-hidden="true">↗</i>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <form class="dr-contact-form" aria-describedby="dr-contact-note" novalidate>
+        <header>
+          <p>Solicitud de asesoramiento</p>
+          <span>Formulario en preparación</span>
+        </header>
+
+        <div class="dr-contact-form__row">
+          <label>Nombre<input type="text" name="name" placeholder="Tu nombre" required /></label>
+          <label>Empresa<input type="text" name="company" placeholder="Nombre de la empresa" /></label>
+        </div>
+
+        <div class="dr-contact-form__row">
+          <label>Email<input type="email" name="email" placeholder="tu@email.com" required /></label>
+          <label>Teléfono<input type="tel" name="phone" placeholder="Teléfono o WhatsApp" /></label>
+        </div>
+
+        <label>Rubro
+          <select name="category">
+            <option value="">Seleccionar rubro</option>
+            <option value="packaging">Packaging</option>
+            <option value="textil">Industria textil</option>
+            <option value="editorial">Editorial</option>
+            <option value="etiquetas">Etiquetas</option>
+            <option value="comunicacion-visual">Comunicación visual</option>
+            <option value="insumos">Tintas e insumos</option>
+          </select>
+        </label>
+
+        <label>Consulta
+          <textarea name="message" rows="5" placeholder="Contanos qué necesitás producir, sobre qué material o qué equipo estás evaluando." required></textarea>
+        </label>
+
+        <button type="button" disabled aria-describedby="dr-contact-note">Formulario en preparación</button>
+        <p id="dr-contact-note">Para una consulta inmediata, escribinos por WhatsApp o correo.</p>
+      </form>
+    </div>
+  </section>
+</main>

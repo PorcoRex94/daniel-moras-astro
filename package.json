@@ -8,6 +8,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "validate:equipos": "node scripts/validate-equipos.mjs",
+    "validate:contact": "node scripts/validate-contact-form.mjs",
+    "validate:links": "node scripts/validate-links.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

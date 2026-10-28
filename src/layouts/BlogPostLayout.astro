@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import type { CollectionEntry } from "astro:content";
+import { getSiteUrl } from "../lib/site-url.js";
 
 interface Heading {
   depth: number;
@@ -21,7 +22,7 @@ const formattedDate = new Intl.DateTimeFormat("es-AR", {
   year: "numeric",
 }).format(post.data.pubDate);
 
-const siteUrl = Astro.site?.origin ?? "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(Astro.site);
 const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
 const articleSchema = {

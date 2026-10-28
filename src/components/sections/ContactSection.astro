@@ -1,33 +1,33 @@
 ---
 import Container from "../ui/Container.astro";
 
+const contactEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() ?? "";
+
 const contactLinks = [
   {
     label: "WhatsApp",
     value: "Consultar por WhatsApp",
     href: "https://wa.me/5491166722505",
+    kind: "whatsapp",
   },
   {
     label: "Email",
     value: "Enviar consulta",
-    href: "mailto: daniel@danielmoras.com.ar",
+    href: "mailto:daniel@danielmoras.com.ar",
+    kind: "email",
   },
 ];
 ---
 
-<section class="contact-section" id="contacto">
-  <div class="section-divider">
-    <span>Contacto</span>
-  </div>
-
+<section class="contact-section" id="contacto" aria-labelledby="contact-section-title">
   <Container class="contact-section__container">
-    <div class="contact-section__content">
-      <p class="eyebrow">Hablemos de tu proyecto</p>
-
-      <h2>
+    <header class="contact-section__heading">
+      <h2 id="contact-section-title">
         Contanos qué necesitás producir y evaluamos la solución adecuada.
       </h2>
+    </header>
 
+    <div class="contact-section__content">
       <p>
         Cada consulta parte de una necesidad distinta: tipo de material, volumen,
         aplicación, tinta, acabado o proceso productivo. Con esos datos podemos
@@ -39,42 +39,111 @@ const contactLinks = [
         {
           contactLinks.map((link) => (
             <a href={link.href} class="contact-link">
-              <span>{link.label}</span>
-              <strong>{link.value}</strong>
+              <span class="contact-link__icon" aria-hidden="true">
+                {
+                  link.kind === "whatsapp" ? (
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M7.3 4.8A7.9 7.9 0 0 1 20 11.1a7.9 7.9 0 0 1-11.4 7L4 19.3l1.2-4.4a7.9 7.9 0 0 1 2.1-10.1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                      <path d="M9 8.1c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.3.1.5 0 .7l-.5.6c.5 1.1 1.3 1.9 2.4 2.4l.6-.5c.2-.1.4-.1.7 0l1.7.7c.3.1.4.3.4.5v.5c0 .3 0 .5-.4.7-.4.2-1 .3-1.6.2-2.6-.4-5.5-3.3-5.9-5.9-.1-.6 0-1.2.2-1.6Z" fill="currentColor" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+                      <path d="m4.5 7 7.5 5.8L19.5 7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    </svg>
+                  )
+                }
+              </span>
+              <span class="contact-link__detail">
+                <span class="contact-link__label">{link.label}</span>
+                <strong>{link.value}</strong>
+              </span>
+              <span class="contact-link__arrow" aria-hidden="true">↗</span>
             </a>
           ))
         }
       </div>
     </div>
 
-    <form class="contact-form">
+    <form
+      class="contact-form"
+      action={contactEndpoint || undefined}
+      method="post"
+      aria-describedby="contact-form-note contact-form-status"
+      aria-labelledby="contact-form-title"
+      data-contact-form
+      data-contact-endpoint={contactEndpoint}
+      novalidate
+    >
+      <div class="contact-form__header">
+        <p id="contact-form-title">Solicitud de asesoramiento</p>
+        <span>Envío online pendiente de configuración</span>
+      </div>
+
       <div class="contact-form__row">
         <label>
           Nombre
-          <input type="text" name="name" placeholder="Tu nombre" />
+          <input
+            type="text"
+            name="name"
+            placeholder="Tu nombre"
+            autocomplete="name"
+            maxlength="100"
+            aria-describedby="contact-name-error"
+            required
+          />
+          <span class="contact-form__error" id="contact-name-error" data-error-for="name" hidden></span>
         </label>
 
         <label>
           Empresa
-          <input type="text" name="company" placeholder="Nombre de la empresa" />
+          <input
+            type="text"
+            name="company"
+            placeholder="Nombre de la empresa"
+            autocomplete="organization"
+            maxlength="120"
+            aria-describedby="contact-company-error"
+          />
+          <span class="contact-form__error" id="contact-company-error" data-error-for="company" hidden></span>
         </label>
       </div>
 
       <div class="contact-form__row">
         <label>
           Email
-          <input type="email" name="email" placeholder="tu@email.com" />
+          <input
+            type="email"
+            name="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            inputmode="email"
+            maxlength="254"
+            aria-describedby="contact-email-error"
+            required
+          />
+          <span class="contact-form__error" id="contact-email-error" data-error-for="email" hidden></span>
         </label>
 
         <label>
           Teléfono
-          <input type="tel" name="phone" placeholder="Teléfono o WhatsApp" />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Teléfono o WhatsApp"
+            autocomplete="tel"
+            inputmode="tel"
+            maxlength="40"
+            aria-describedby="contact-phone-error"
+            required
+          />
+          <span class="contact-form__error" id="contact-phone-error" data-error-for="phone" hidden></span>
         </label>
       </div>
 
       <label>
         Rubro
-        <select name="category">
+        <select name="category" aria-describedby="contact-category-error">
           <option value="">Seleccionar rubro</option>
           <option value="packaging">Packaging</option>
           <option value="textil">Industria textil</option>
@@ -83,6 +152,7 @@ const contactLinks = [
           <option value="comunicacion-visual">Comunicación visual</option>
           <option value="insumos">Tintas e insumos</option>
         </select>
+        <span class="contact-form__error" id="contact-category-error" data-error-for="category" hidden></span>
       </label>
 
       <label>
@@ -90,18 +160,174 @@ const contactLinks = [
         <textarea
           name="message"
           rows="5"
+          maxlength="2000"
+          aria-describedby="contact-message-error"
           placeholder="Contanos qué necesitás producir, sobre qué material, volumen aproximado o qué equipo estás evaluando."
         ></textarea>
+        <span class="contact-form__error" id="contact-message-error" data-error-for="message" hidden></span>
       </label>
 
-      <button type="submit">
+      <div class="contact-form__honeypot" aria-hidden="true">
+        <label>
+          Sitio web
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+
+      <button type="submit" aria-describedby="contact-form-note">
         Enviar consulta
       </button>
 
-      <p class="contact-form__note">
-        El formulario queda preparado visualmente. Después lo conectamos a email,
-        WhatsApp, Formspree, Netlify Forms o el sistema que prefieras.
+      <p class="contact-form__status" id="contact-form-status" data-contact-status role="status" aria-live="polite" hidden></p>
+
+      <p class="contact-form__note" id="contact-form-note">
+        Para una consulta inmediata, escribinos por WhatsApp o por email.
       </p>
     </form>
   </Container>
 </section>
+
+<script>
+  import { validateContactPayload } from "../../lib/contact-form-validation.js";
+
+  const form = document.querySelector("[data-contact-form]");
+
+  if (form instanceof HTMLFormElement) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    const status = form.querySelector("[data-contact-status]");
+    const endpoint = form.dataset.contactEndpoint?.trim() ?? "";
+    const fields = ["name", "email", "phone", "company", "category", "message"];
+    let isSubmitting = false;
+
+    const getField = (fieldName) => form.elements.namedItem(fieldName);
+
+    const setFieldError = (fieldName, message = "") => {
+      const input = getField(fieldName);
+      const error = form.querySelector(`[data-error-for="${fieldName}"]`);
+
+      if (input instanceof HTMLElement) {
+        input.setAttribute("aria-invalid", message ? "true" : "false");
+      }
+
+      if (error instanceof HTMLElement) {
+        error.textContent = message;
+        error.hidden = !message;
+      }
+    };
+
+    const setStatus = (state, message) => {
+      if (!(status instanceof HTMLElement)) return;
+
+      status.dataset.state = state;
+      status.textContent = message;
+      status.hidden = false;
+    };
+
+    const clearStatus = () => {
+      if (!(status instanceof HTMLElement)) return;
+
+      status.textContent = "";
+      status.hidden = true;
+      delete status.dataset.state;
+    };
+
+    const getPayload = () => {
+      const data = new FormData(form);
+
+      return Object.fromEntries(
+        ["name", "email", "phone", "company", "category", "message", "website"].map((field) => [
+          field,
+          String(data.get(field) ?? "").trim(),
+        ]),
+      );
+    };
+
+    const setSubmitting = (submitting) => {
+      isSubmitting = submitting;
+      form.setAttribute("aria-busy", String(submitting));
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = submitting;
+        submitButton.textContent = submitting ? "Enviando consulta…" : "Enviar consulta";
+      }
+    };
+
+    fields.forEach((fieldName) => {
+      const input = getField(fieldName);
+
+      input?.addEventListener("input", () => setFieldError(fieldName));
+      input?.addEventListener("change", () => setFieldError(fieldName));
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (isSubmitting) return;
+
+      clearStatus();
+      const payload = getPayload();
+      const errors = validateContactPayload(payload);
+
+      fields.forEach((fieldName) => setFieldError(fieldName, errors[fieldName]));
+
+      const firstInvalidField = fields.find((fieldName) => errors[fieldName]);
+
+      if (firstInvalidField) {
+        setStatus("error", "Revisá los campos marcados antes de enviar la consulta.");
+        const invalidInput = getField(firstInvalidField);
+        invalidInput?.focus();
+        return;
+      }
+
+      if (payload.website) {
+        form.reset();
+        setStatus("success", "Gracias. Recibimos tu consulta.");
+        return;
+      }
+
+      if (!endpoint) {
+        setStatus(
+          "error",
+          "El envío online todavía no está configurado. Podés comunicarte por WhatsApp o por email.",
+        );
+        return;
+      }
+
+      try {
+        const endpointUrl = new URL(endpoint, window.location.origin);
+
+        if (endpointUrl.origin !== window.location.origin && endpointUrl.protocol !== "https:") {
+          throw new Error("unsafe-endpoint");
+        }
+
+        setSubmitting(true);
+
+        const response = await fetch(endpointUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const responseBody = await response.json().catch(() => ({}));
+
+        if (!response.ok || responseBody?.ok !== true) {
+          if (responseBody?.errors && typeof responseBody.errors === "object") {
+            fields.forEach((fieldName) => setFieldError(fieldName, responseBody.errors[fieldName]));
+          }
+
+          throw new Error("send-failed");
+        }
+
+        form.reset();
+        fields.forEach((fieldName) => setFieldError(fieldName));
+        setStatus("success", "Gracias. Recibimos tu consulta y te responderemos a la brevedad.");
+      } catch {
+        setStatus(
+          "error",
+          "No pudimos enviar la consulta. Revisá los datos e intentá nuevamente o contactanos por WhatsApp o email.",
+        );
+      } finally {
+        setSubmitting(false);
+      }
+    });
+  }
+</script>

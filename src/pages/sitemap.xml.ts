@@ -1,9 +1,14 @@
 import { getCollection } from "astro:content";
+import { equiposPublicados } from "../data/equiposCatalogo";
+import { insumosPublicados } from "../data/insumosIndex";
+import { getSiteUrl } from "../lib/site-url";
 
-const siteUrl = "https://daniel-moras-astro.vercel.app";
+const siteUrl = getSiteUrl(import.meta.env.SITE);
 
 const staticPages = [
   "",
+  "equipos",
+  "insumos",
   "blog",
   "rubros/packaging",
   "rubros/textil",
@@ -16,10 +21,12 @@ export async function GET() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const blogPages = posts.map((post) => `blog/${post.id}`);
+  const equipmentPages = equiposPublicados.map((equipo) => `equipos/${equipo.id}`);
+  const supplyPages = insumosPublicados.map((insumo) => `insumos/${insumo.id}`);
 
-  const urls = [...staticPages, ...blogPages]
+  const urls = [...staticPages, ...blogPages, ...equipmentPages, ...supplyPages]
     .map((path) => {
-      const loc = `${siteUrl}/${path}`.replace(/\/$/, "");
+      const loc = new URL(path ? `/${path}` : "/", siteUrl).toString();
 
       return `
   <url>
