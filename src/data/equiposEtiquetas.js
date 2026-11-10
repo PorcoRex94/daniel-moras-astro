@@ -7,6 +7,81 @@ export const equiposEtiquetas = [
      ======================================================= */
 
   {
+  id: "flora-j-230e",
+  name: "Flora J-230E",
+  brand: "Flora",
+  family: "impresion-etiquetas",
+  subgroup: "inkjet-etiquetas",
+  shortDescription: "Prensa digital inkjet UV HD para etiquetas en bobina, con ancho de impresión de 230 mm, configuración CMYK con blanco y velocidad de 20 a 75 m/min.",
+  longDescription: "La Flora J-230E es una prensa digital inkjet UV HD para la producción de etiquetas en bobina. Utiliza cabezales piezoeléctricos industriales de alta precisión, configuraciones de cuatro o cinco colores y resolución de 600 × 600 o 600 × 1200 dpi. Ofrece un ancho efectivo de impresión de 230 mm, trabaja con papel estucado, papel sintético y films autoadhesivos de PE, PET o PVC, y admite datos variables como códigos QR, códigos de barras, textos e imágenes. Puede evaluarse para convertidores e imprentas que necesitan producir etiquetas de alta calidad, múltiples referencias y tiradas flexibles en un equipo compacto.",
+  metaDescription: "Prensa digital inkjet UV Flora J-230E para etiquetas, CMYK con blanco, 230 mm de ancho y hasta 75 m/min.",
+  image: `${imageBase}/flora-j-230e.png`,
+  video: null,
+  pdf: `${pdfBase}/Flora-J-230e.pdf`,
+  pageReady: true,
+  featured: true,
+  featuredLabel: "Equipo destacado",
+  featuredText: "",
+  applications: [
+  {
+  title: "Etiquetas autoadhesivas",
+  text: "Permite producir etiquetas en bobina sobre papel estucado, papel sintético y films autoadhesivos compatibles.",
+  },
+  {
+  title: "Datos variables",
+  text: "Admite códigos QR, códigos de barras, textos variables e imágenes de fondo fijas o totalmente variables.",
+  },
+  {
+  title: "Etiquetas con blanco",
+  text: "La configuración CMYK con blanco amplía las posibilidades sobre materiales transparentes, metalizados o de color.",
+  },
+  {
+  title: "Tiradas flexibles",
+  text: "Resulta adecuada para trabajos con múltiples referencias, cambios de diseño y producción ajustada a la demanda.",
+  },
+  {
+  title: "Aplicaciones compactas",
+  text: "Su configuración está pensada para integrar una prensa digital de etiquetas en espacios reducidos.",
+  },
+  ],
+  features: [
+  {
+  title: "Impresión inkjet UV HD",
+  text: "Utiliza cabezales piezoeléctricos industriales, impresión en escala de grises y gota mínima de 3 pl.",
+  },
+  {
+  title: "Resolución y velocidad",
+  text: "Trabaja a 600 × 600 o 600 × 1200 dpi, con velocidades de 20 a 75 m/min.",
+  },
+  {
+  title: "Configuración de color",
+  text: "Ofrece una configuración flexible de cuatro o cinco colores, con CMYK y blanco según la aplicación.",
+  },
+  {
+  title: "Ancho y sustratos",
+  text: "Ofrece un ancho efectivo de impresión de 230 mm, admite materiales de hasta 250 mm y espesores de 0,04 a 0,35 mm.",
+  },
+  {
+  title: "Manejo de bobinas",
+  text: "Integra accionamiento por servomotor, control de tensión de lazo cerrado y detección de tensión, corte de material y diámetro de bobina.",
+  },
+  {
+  title: "Mantenimiento automatizado",
+  text: "Incluye limpieza automática con un solo comando, humidificación en espera y compensación de nozzles.",
+  },
+  ],
+  consultationNotes: [
+  "Tipo de etiqueta, aplicación final y volumen mensual estimado.",
+  "Materiales, espesor y ancho de bobina requeridos.",
+  "Necesidad de blanco, cantidad de colores y exigencias de reproducción de color.",
+  "Cantidad de referencias, datos variables y cambios de trabajo.",
+  "Espacio disponible, alimentación eléctrica trifásica y aire comprimido para la instalación.",
+  ],
+  relatedRubroLinks: ["etiquetas"],
+  order: 1,
+  },
+
+  {
   id: "flora-j350gt",
   name: "Flora J-350GT",
   brand: "Flora",
@@ -87,7 +162,7 @@ export const equiposEtiquetas = [
   "Espacio, alimentación eléctrica, aire comprimido y condiciones ambientales de instalación.",
   ],
   relatedRubroLinks: ["etiquetas"],
-  order: 1,
+  order: 2,
   },
   {
   id: "flora-orca350",

@@ -569,7 +569,7 @@ export const equipos = [
     subcategoryId: "pod-color",
     technology: "Inkjet digital",
     description:
-      "Rotativa inkjet digital color para producción editorial, publicaciones y libros bajo demanda.",
+      "Rotativa inkjet digital a cuatro colores para producción editorial, publicaciones y libros bajo demanda, con impresión en ambas caras.",
     image: "/images/rubros/editorial.webp",
     video: null,
     pdf: null,
@@ -582,7 +582,7 @@ export const equipos = [
       "Trabajos variables en bobina.",
     ],
     features: [
-      "Impresión digital color.",
+      "Impresión a cuatro colores en ambas caras.",
       "Producción continua.",
       "Orientada al mercado editorial.",
       "Permite trabajar tiradas variables.",

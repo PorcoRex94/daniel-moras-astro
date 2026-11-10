@@ -8,14 +8,14 @@ export const equiposEditorial = [
   brand: "Flora",
   family: "impresion-editorial",
   subgroup: "inkjet-editorial",
-  shortDescription: "Impresora inkjet POD entry level para producción editorial a color, con impresión doble faz, alimentación desde bobina y corte en línea.",
-  longDescription: "La Flora Phenix 440E es una impresora inkjet digital orientada a la producción editorial bajo demanda a color. Utiliza cabezales industriales piezoeléctricos, tinta pigmentada al agua e impresión doble faz, con una velocidad máxima de 75 m/min y una velocidad óptima de calidad de 50 m/min. Su configuración incorpora alimentación automática independiente desde bobina, software de control Flora, flujo RIP, corte en línea, apilado desplazado y salida segmentada de bobina a hoja individual. Puede evaluarse para imprentas editoriales, centros de impresión digital y empresas que necesitan producir libros, manuales, publicaciones educativas y trabajos variables con un flujo integrado y escalable.",
-  metaDescription: "Impresora inkjet editorial Flora Phenix 440E a color, doble faz, hasta 75 m/min, con alimentación desde bobina y corte en línea.",
+  shortDescription: "Impresora inkjet POD de cuatro colores para producción editorial, con impresión a doble faz, alimentación desde bobina y corte en línea.",
+  longDescription: "La Flora Phenix 440E es una impresora inkjet digital orientada a la producción editorial bajo demanda a cuatro colores en ambas caras. Utiliza cabezales industriales piezoeléctricos, tinta pigmentada al agua e impresión doble faz, con una velocidad máxima de 75 m/min y una velocidad óptima de calidad de 50 m/min. Su configuración incorpora alimentación automática independiente desde bobina, software de control Flora, flujo RIP, corte en línea, apilado desplazado y salida segmentada de bobina a hoja individual. Puede evaluarse para imprentas editoriales, centros de impresión digital y empresas que necesitan producir libros, manuales, publicaciones educativas y trabajos variables con un flujo integrado y escalable.",
+  metaDescription: "Impresora inkjet editorial Flora Phenix 440E, cuatro colores en ambas caras, hasta 75 m/min, con alimentación desde bobina y corte en línea.",
   image: `${imageBase}/flora-phenix-440e-inkjet-editorial.webp`,
   video: null,
   pdf: `${pdfBase}/Phenix-440E.pdf`,
   pageReady: true,
-  featured: false,
+  featured: true,
   featuredLabel: "Equipo destacado",
   featuredText: "",
   applications: [
@@ -46,8 +46,8 @@ export const equiposEditorial = [
   ],
   features: [
   {
-  title: "Impresión doble faz a color",
-  text: "Está configurada para impresión a color en ambas caras, con precisión de registro anverso y reverso de ±0,1 mm.",
+  title: "Impresión doble faz a cuatro colores",
+  text: "Está configurada para impresión a cuatro colores en ambas caras, con precisión de registro anverso y reverso de ±0,1 mm.",
   },
   {
   title: "Velocidad de producción",
@@ -175,20 +175,20 @@ export const equiposEditorial = [
   brand: "Flora",
   family: "impresion-editorial",
   subgroup: "inkjet-editorial",
-  shortDescription: "Rotativa inkjet digital monocromática para producción editorial bajo demanda, con impresión doble faz, corte y apilado integrados.",
-  longDescription: "La Flora Phenix440 es una rotativa inkjet digital orientada a la producción editorial monocromática desde bobina. Equipada con cabezales industriales Epson PrecisionCore y tinta pigmentada a base de agua, trabaja en doble faz con velocidades de hasta 100 m/min, según la resolución seleccionada. Su sistema admite papel obra de distintos gramajes e integra corte en producción, apilado escalonado y salida a pliego dividido. Puede evaluarse para imprentas editoriales, centros de impresión bajo demanda y empresas que buscan automatizar la producción de libros, manuales, cuadernillos y otras publicaciones con contenidos variables.",
-  metaDescription: "Rotativa inkjet editorial Flora Phenix440, doble faz monocromática, hasta 100 m/min, con corte y apilado integrados.",
+  shortDescription: "Rotativa inkjet digital a cuatro colores para producción editorial bajo demanda, con impresión en ambas caras, corte y apilado integrados.",
+  longDescription: "La Flora Phenix440 es una rotativa inkjet digital orientada a la producción editorial a cuatro colores en ambas caras desde bobina. Equipada con cabezales industriales Epson PrecisionCore y tinta pigmentada a base de agua, trabaja en doble faz con velocidades de hasta 100 m/min, según la resolución seleccionada. Su sistema admite papel obra de distintos gramajes e integra corte en producción, apilado escalonado y salida a pliego dividido. Puede evaluarse para imprentas editoriales, centros de impresión bajo demanda y empresas que buscan automatizar la producción de libros, manuales, cuadernillos y otras publicaciones con contenidos variables.",
+  metaDescription: "Rotativa inkjet editorial Flora Phenix440, cuatro colores en ambas caras, hasta 100 m/min, con corte y apilado integrados.",
   image: `${imageBase}/flora-phenix440.webp`,
   video: "https://www.youtube.com/embed/JMoYTDZWnOI",
   pdf: `${pdfBase}/Flora-Phenix330-Phenix440.pdf`,
   pageReady: true,
-  featured: true,
+  featured: false,
   featuredLabel: "Equipo destacado",
   featuredText: "",
   applications: [
   {
   title: "Libros bajo demanda",
-  text: "Permite producir contenidos editoriales monocromáticos desde bobina, ajustando las tiradas a la demanda de cada título.",
+  text: "Permite producir contenidos editoriales a cuatro colores desde bobina, ajustando las tiradas a la demanda de cada título.",
   },
   {
   title: "Manuales y cuadernillos",
@@ -217,8 +217,8 @@ export const equiposEditorial = [
   text: "Alcanza hasta 100 m/min a 1200 x 600 dpi en 1 bit y hasta 50 m/min a 1200 x 1200 dpi en 2 bits.",
   },
   {
-  title: "Producción doble faz",
-  text: "Ofrece impresión monocromática a doble faz con una productividad informada de hasta 673 hojas A4 por minuto.",
+  title: "Producción doble faz a cuatro colores",
+  text: "Ofrece impresión a cuatro colores en ambas caras con una productividad informada de hasta 673 hojas A4 por minuto.",
   },
   {
   title: "Tecnología de impresión",
