@@ -7,7 +7,7 @@ const { equipo } = Astro.props;
 
 const siteUrl = getSiteUrl(Astro.site);
 
-const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const pageUrl = siteUrl ? new URL(Astro.url.pathname, siteUrl).toString() : "";
 
 const rubroLabels = {
   textil: "Industria textil",
@@ -58,7 +58,7 @@ const consultationNotes = equipo.consultationNotes ?? [
   "Tipo de terminación posterior.",
 ];
 
-const schema = [
+const schema = siteUrl ? [
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -97,9 +97,9 @@ const schema = [
       },
     ],
   },
-];
+] : [];
 
-const contactHref = `/#contacto?equipo=${encodeURIComponent(equipo.name)}`;
+const contactHref = `/?equipo=${encodeURIComponent(equipo.name)}#contacto`;
 ---
 
 <BaseLayout

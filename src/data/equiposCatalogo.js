@@ -89,7 +89,7 @@ const destinosEspecialesCatalogo = {
     ariaLabel: "Ver Saga SG-ASC2301",
   },
   "diji-serie-epa3-plus": {
-    href: "/#contacto?equipo=DIJI%20Serie%20EPA3%2B",
+    href: "/?equipo=DIJI%20Serie%20EPA3%2B#contacto",
     action: "Consultar por la serie",
     ariaLabel: "Consultar por DIJI Serie EPA3+",
   },

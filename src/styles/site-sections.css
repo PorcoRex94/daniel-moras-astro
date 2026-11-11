@@ -1615,6 +1615,7 @@ html {
   font-size: 0.78rem;
   font-weight: 750;
   letter-spacing: 0.04em;
+  line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
   list-style: none;
@@ -1623,6 +1624,18 @@ html {
 
 .site-header__dropdown summary::-webkit-details-marker {
   display: none;
+}
+
+.site-header__dropdown-icon {
+  display: block;
+  width: 0.72rem;
+  height: 0.48rem;
+  flex: 0 0 auto;
+  transition: transform var(--transition);
+}
+
+.site-header__dropdown[open] .site-header__dropdown-icon {
+  transform: rotate(180deg);
 }
 
 .site-header__nav > a::after,

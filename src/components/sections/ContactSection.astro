@@ -1,15 +1,21 @@
 ---
 import Container from "../ui/Container.astro";
+import { getWhatsAppHref } from "../../lib/whatsapp.js";
 
 const contactEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() ?? "";
+const whatsappHref = getWhatsAppHref();
 
 const contactLinks = [
-  {
-    label: "WhatsApp",
-    value: "Consultar por WhatsApp",
-    href: "https://wa.me/5491166722505",
-    kind: "whatsapp",
-  },
+  ...(whatsappHref
+    ? [
+        {
+          label: "WhatsApp",
+          value: "Consultar por WhatsApp",
+          href: whatsappHref,
+          kind: "whatsapp",
+        },
+      ]
+    : []),
   {
     label: "Email",
     value: "Enviar consulta",
@@ -38,7 +44,13 @@ const contactLinks = [
       <div class="contact-section__links">
         {
           contactLinks.map((link) => (
-            <a href={link.href} class="contact-link">
+            <a
+              href={link.href}
+              class="contact-link"
+              data-contact-whatsapp={link.kind === "whatsapp" ? "true" : undefined}
+              target={link.kind === "whatsapp" ? "_blank" : undefined}
+              rel={link.kind === "whatsapp" ? "noreferrer" : undefined}
+            >
               <span class="contact-link__icon" aria-hidden="true">
                 {
                   link.kind === "whatsapp" ? (
@@ -77,7 +89,7 @@ const contactLinks = [
     >
       <div class="contact-form__header">
         <p id="contact-form-title">Solicitud de asesoramiento</p>
-        <span>Envío online pendiente de configuración</span>
+        <span>{contactEndpoint ? "Envío online habilitado" : "Envío online pendiente de configuración"}</span>
       </div>
 
       <div class="contact-form__row">
@@ -174,6 +186,8 @@ const contactLinks = [
         </label>
       </div>
 
+      <input type="hidden" name="requestId" value="" data-contact-request-id />
+
       <button type="submit" aria-describedby="contact-form-note">
         Enviar consulta
       </button>
@@ -197,7 +211,46 @@ const contactLinks = [
     const status = form.querySelector("[data-contact-status]");
     const endpoint = form.dataset.contactEndpoint?.trim() ?? "";
     const fields = ["name", "email", "phone", "company", "category", "message"];
+    const requestIdField = form.querySelector("[data-contact-request-id]");
+    const messageField = form.elements.namedItem("message");
+    const whatsappLink = form.querySelector("[data-contact-whatsapp='true']");
     let isSubmitting = false;
+
+    const createRequestId = () => {
+      if (typeof crypto?.randomUUID === "function") return crypto.randomUUID();
+
+      return `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    };
+
+    const setRequestId = () => {
+      if (requestIdField instanceof HTMLInputElement) {
+        requestIdField.value = createRequestId();
+      }
+    };
+
+    const consultationSubject = () => {
+      const params = new URLSearchParams(window.location.search);
+      const rawSubject = params.get("equipo") ?? params.get("insumo") ?? "";
+
+      return rawSubject.trim().replace(/\s+/g, " ").slice(0, 120);
+    };
+
+    const applyConsultationContext = () => {
+      const subject = consultationSubject();
+      if (!subject) return;
+
+      const message = `Hola Daniel, quiero consultar por ${subject}.`;
+
+      if (messageField instanceof HTMLTextAreaElement && !messageField.value.trim()) {
+        messageField.value = message;
+      }
+
+      if (whatsappLink instanceof HTMLAnchorElement) {
+        const linkUrl = new URL(whatsappLink.href);
+        linkUrl.searchParams.set("text", message);
+        whatsappLink.href = linkUrl.toString();
+      }
+    };
 
     const getField = (fieldName) => form.elements.namedItem(fieldName);
 
@@ -235,7 +288,7 @@ const contactLinks = [
       const data = new FormData(form);
 
       return Object.fromEntries(
-        ["name", "email", "phone", "company", "category", "message", "website"].map((field) => [
+        ["name", "email", "phone", "company", "category", "message", "website", "requestId"].map((field) => [
           field,
           String(data.get(field) ?? "").trim(),
         ]),
@@ -251,6 +304,9 @@ const contactLinks = [
         submitButton.textContent = submitting ? "Enviando consulta…" : "Enviar consulta";
       }
     };
+
+    setRequestId();
+    applyConsultationContext();
 
     fields.forEach((fieldName) => {
       const input = getField(fieldName);
@@ -318,6 +374,7 @@ const contactLinks = [
         }
 
         form.reset();
+        setRequestId();
         fields.forEach((fieldName) => setFieldError(fieldName));
         setStatus("success", "Gracias. Recibimos tu consulta y te responderemos a la brevedad.");
       } catch {

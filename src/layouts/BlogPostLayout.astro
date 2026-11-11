@@ -23,9 +23,9 @@ const formattedDate = new Intl.DateTimeFormat("es-AR", {
 }).format(post.data.pubDate);
 
 const siteUrl = getSiteUrl(Astro.site);
-const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const pageUrl = siteUrl ? new URL(Astro.url.pathname, siteUrl).toString() : "";
 
-const articleSchema = {
+const articleSchema = siteUrl ? {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "@id": `${pageUrl}#article`,
@@ -46,9 +46,9 @@ const articleSchema = {
     "@id": pageUrl,
   },
   inLanguage: "es-AR",
-};
+} : null;
 
-const breadcrumbSchema = {
+const breadcrumbSchema = siteUrl ? {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
@@ -71,7 +71,7 @@ const breadcrumbSchema = {
       item: pageUrl,
     },
   ],
-};
+} : null;
 ---
 
 <BaseLayout

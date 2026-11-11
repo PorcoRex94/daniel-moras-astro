@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getWhatsAppHref } from "../../lib/whatsapp.js";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -62,12 +63,14 @@ const rubros = [
   },
 ];
 
+const whatsappHref = getWhatsAppHref();
+
 const contactLinks = [
-  {
+  ...(whatsappHref ? [{
     label: "WhatsApp",
     detail: "Consultar por WhatsApp",
-    href: "https://wa.me/5491166722505",
-  },
+    href: whatsappHref,
+  }] : []),
   {
     label: "Correo",
     detail: "daniel@danielmoras.com.ar",

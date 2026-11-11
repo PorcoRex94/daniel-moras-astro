@@ -11,6 +11,8 @@
     "validate:equipos": "node scripts/validate-equipos.mjs",
     "validate:contact": "node scripts/validate-contact-form.mjs",
     "validate:links": "node scripts/validate-links.mjs",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "validate:whatsapp": "node scripts/validate-whatsapp.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

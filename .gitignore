@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Configuración privada del endpoint PHP de contacto.
+hosting/contact-endpoint/contact.config.php
+hosting/contact-endpoint/vendor/
+
 # macOS-specific files
 .DS_Store
 

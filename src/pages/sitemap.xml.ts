@@ -1,9 +1,10 @@
 import { getCollection } from "astro:content";
 import { equiposPublicados } from "../data/equiposCatalogo";
 import { insumosPublicados } from "../data/insumosIndex";
-import { getSiteUrl } from "../lib/site-url";
+import { getSiteUrl, isSiteIndexingEnabled } from "../lib/site-url";
 
 const siteUrl = getSiteUrl(import.meta.env.SITE);
+const isIndexable = Boolean(siteUrl) && isSiteIndexingEnabled(import.meta.env.SITE_INDEXING);
 
 const staticPages = [
   "",
@@ -18,6 +19,13 @@ const staticPages = [
 ];
 
 export async function GET() {
+  if (!isIndexable) {
+    return new Response(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`,
+      { headers: { "Content-Type": "application/xml" } },
+    );
+  }
+
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const blogPages = posts.map((post) => `blog/${post.id}`);

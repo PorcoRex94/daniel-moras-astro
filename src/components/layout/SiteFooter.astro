@@ -1,3 +1,9 @@
+---
+import { getWhatsAppHref } from "../../lib/whatsapp.js";
+
+const whatsappHref = getWhatsAppHref();
+---
+
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__identity">
@@ -19,9 +25,11 @@
 
     <div class="site-footer__contact">
       <p>Contacto</p>
-      <a href="https://wa.me/5491166722505" target="_blank" rel="noreferrer">
-        WhatsApp
-      </a>
+      {whatsappHref && (
+        <a href={whatsappHref} target="_blank" rel="noreferrer">
+          WhatsApp
+        </a>
+      )}
       <a href="mailto:daniel@danielmoras.com.ar">daniel@danielmoras.com.ar</a>
     </div>
   </div>

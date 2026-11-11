@@ -2,9 +2,9 @@
 
 ## Estado comprobado
 
-El proyecto se genera de forma estática: `astro.config.mjs` no declara `output: "server"`, adapter, endpoint ni función serverless. El repositorio tampoco contiene `vercel.json`, `netlify.toml`, `wrangler.toml`, proveedor de correo, credenciales ni una variable `PUBLIC_CONTACT_FORM_ENDPOINT` configurada.
+El proyecto se genera de forma estática: `astro.config.mjs` no declara `output: "server"` ni adapter. El repositorio no contiene credenciales ni una variable `PUBLIC_CONTACT_FORM_ENDPOINT` configurada.
 
-La URL histórica `daniel-moras-astro.vercel.app` es la única pista de infraestructura. No confirma que Vercel sea el hosting final ni autoriza a agregar una función específica de esa plataforma.
+Hostinger es el hosting final previsto. La URL histórica de Vercel no se usa como canonical ni como base de metadatos.
 
 El formulario actual ya implementa en cliente:
 
@@ -15,17 +15,15 @@ El formulario actual ya implementa en cliente:
 
 No hay validación del servidor, rate limit ni recepción real hasta que exista un endpoint. Por lo tanto, el formulario **no está operativo** y no debe presentarse como tal.
 
-## Propuesta compatible si se confirma Vercel
+## Implementación compatible con Hostinger
 
-Mantener Astro estático y agregar una única Vercel Function Node en `api/contact.mjs`. Esta alternativa no requiere convertir todas las páginas a SSR ni incorporar el adapter de Astro. El cliente se configuraría con:
+Se mantiene Astro estático y se agregó un endpoint PHP independiente en `hosting/contact-endpoint/contact.php`. No requiere convertir el sitio a SSR ni agregar un servicio de pago. Una vez instalado en Hostinger, el cliente se configura con:
 
 ```env
-PUBLIC_CONTACT_FORM_ENDPOINT=/api/contact
+PUBLIC_CONTACT_FORM_ENDPOINT=/api/contact.php
 ```
 
-La función debe enviar por HTTP a un proveedor transaccional aprobado o, si ya existe, al SMTP autenticado del correo comercial. No se agrega ninguno hasta que se confirme cuál se utilizará. La función debe esperar la confirmación del proveedor antes de responder éxito.
-
-Para un hosting distinto, se mantiene exactamente el contrato HTTP y se implementa la misma función en el mecanismo nativo del proveedor (por ejemplo, una función de Netlify o un Worker de Cloudflare). No conviene crear el endpoint antes de confirmar el destino, porque no sería verificable ni necesariamente desplegable.
+El endpoint usa SMTP autenticado de Hostinger mediante PHPMailer, no `mail()`. No se agregaron destinatarios ni credenciales: la configuración privada se define en el servidor, fuera de `public_html`. El paso a paso y los requisitos están en [hostinger-contact-endpoint.md](./hostinger-contact-endpoint.md).
 
 ## Contrato seguro del endpoint
 

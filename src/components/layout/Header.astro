@@ -38,7 +38,9 @@ const rubrosActive = pathname.startsWith("/rubros");
       <details class="site-header__dropdown">
         <summary aria-current={rubrosActive ? "page" : undefined}>
           Rubros
-          <span aria-hidden="true">⌄</span>
+          <svg class="site-header__dropdown-icon" viewBox="0 0 12 8" aria-hidden="true">
+            <path d="m1 1.5 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </summary>
 
         <div class="site-header__dropdown-menu">
